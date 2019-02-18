@@ -25,17 +25,19 @@ while True:
   mouse = rivalcfg.get_first_mouse()
   if mouse is None:
     time.sleep(1)
-  else:
-    print("Found mouse: {}".format(mouse))
-    try:
-      prev = (0, 0, 0)
-      for (total_time, color) in cycle(config):
-        t = 0
-        while t < total_time:
-          c = interpolate(t / total_time, prev, color)
-          mouse.set_color(*c)
-          t += delta
-          time.sleep(delta)
-        prev = color
-    except Exception as e:
-      print("Could not talk to mouse: {}".format(e))
+    continue
+
+  print("Found mouse: {}".format(mouse))
+
+  prev = (0, 0, 0)
+  for (total_time, color) in cycle(config):
+    t = 0
+    while t < total_time:
+      c = interpolate(t / total_time, prev, color)
+      try:
+        mouse.set_color(*c)
+      except Exception as e:
+        print("Could not talk to mouse: {}".format(e))
+      t += delta
+      time.sleep(delta)
+    prev = color
