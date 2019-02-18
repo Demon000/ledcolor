@@ -32,13 +32,13 @@ while True:
       instance = mouse.RivalMouse(profile)
       prev = (0, 0, 0)
       for (total_time, color) in cycle(config):
-         t = 0
-         while t < total_time:
-           c = interpolate(t / total_time, prev, color)
-           instance.set_color(*c)
-           t += delta
-           time.sleep(delta)
-         prev = color
+        t = 0
+        while t < total_time:
+          c = interpolate(t / total_time, prev, color)
+          instance.set_color(*c)
+          t += delta
+          time.sleep(delta)
+        prev = color
     except Exception, e:
       print "Could not talk to mouse: " + str(e)
 
