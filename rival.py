@@ -8,12 +8,15 @@ import rivalcfg
 
 from rivalcfg.helpers import is_color, color_string_to_rgb
 
+from helpers import text_to_morse, morse_to_config, args_to_config
+
 DEFAULT_UPDATE_TIME = 0.05
 DEFAULT_WAIT_TIME = 1
 
 parser = OptionParser()
 parser.add_option('-u', '--update-time', dest='update_time', default=DEFAULT_UPDATE_TIME, type=float)
 parser.add_option('-w', '--wait-time', dest='wait_time', default=DEFAULT_WAIT_TIME, type=float)
+parser.add_option('-t', '--text', dest='text', type=str)
 
 (options, args) = parser.parse_args()
 
@@ -21,27 +24,13 @@ values = vars(options)
 
 update_time = values['update_time']
 wait_time = values['wait_time']
+text = values['text']
 
-config = []
-for arg in args:
-  duration_string, color_string = arg.split(':')
-
-  try:
-    duration = float(duration_string)
-  except ValueError:
-    print('`{}` is not a valid duration.'.format(duration_string))
-    exit()
-
-  if not is_color(color_string):
-    print('`{}` is not a valid color.'.format(color_string))
-    exit()
-
-  color = color_string_to_rgb(color_string)
-  config.append((duration, color))
-
-if not config:
-  print('No colors have been defined.')
-  exit()
+if text:
+  morse = text_to_morse(text)
+  config = morse_to_config(morse, update_time)
+else:
+  config = args_to_config(args)
 
 def t_mul(t, s):
   return tuple(x * s for x in t)
