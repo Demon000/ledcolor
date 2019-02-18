@@ -69,7 +69,6 @@ def morse_to_config(morse, update_time):
     config.extend(colors)
     config.extend(dark)
 
-
   return config
 
 def args_to_config(args):
