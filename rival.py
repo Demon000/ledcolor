@@ -72,8 +72,9 @@ def wait_for_mouse():
 
 mouse = wait_for_mouse()
 
-last_color = (0, 0, 0)
-for (color_time, color) in cycle(config):
+color_cycle = cycle(config)
+last_color = next(color_cycle)[1]
+for (color_time, color) in color_cycle:
   current_color_time = 0
   while current_color_time < color_time:
     interpolated_color = interpolate(current_color_time / color_time, last_color, color)
