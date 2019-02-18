@@ -11,7 +11,10 @@ from helpers import text_to_morse, morse_to_config, args_to_config
 DEFAULT_UPDATE_TIME = 0.05
 DEFAULT_WAIT_TIME = 1
 
-parser = OptionParser()
+description = 'Colors: a list of colors to cycle through, ' + \
+    'for example: 1:#ff0000 0.5:ff0000 2:#f00 0.5:f00 3:red'
+usage = '%prog [options] [colors]'
+parser = OptionParser(usage=usage, description=description)
 parser.add_option('-u', '--update-time', dest='update_time', default=DEFAULT_UPDATE_TIME, type=float)
 parser.add_option('-w', '--wait-time', dest='wait_time', default=DEFAULT_WAIT_TIME, type=float)
 parser.add_option('-t', '--text', dest='text', type=str)
