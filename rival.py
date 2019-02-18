@@ -56,6 +56,8 @@ for (color_time, color) in cycle(config):
     if result < 0:
       mouse = wait_for_mouse()
 
+    mouse.save()
+
     current_color_time += UPDATE_TIME
     time.sleep(UPDATE_TIME)
 
