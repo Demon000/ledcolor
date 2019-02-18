@@ -3,7 +3,7 @@ import numpy
 
 from tuple_helpers import t_add_w
 
-CHUNK_SIZE = 2**11
+CHUNK_SIZE = 2**12
 CHANNELS = 1
 RATE = 44100
 MAX_PEAK = 2**16
