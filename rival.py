@@ -17,10 +17,23 @@ config = [
   (5, (255, 0, 255)),
 ]
 
-def interpolate(t, a, b):
-  if t > 1: t = 1
-  if t < 0: t = 0
-  return tuple( int((1 - t) * x + t * y) for (x, y) in zip(a, b))
+def t_mul(t, s):
+  return tuple(x * s for x in t)
+
+def t_add(a, b):
+  return tuple(x + y for (x, y) in zip(a, b))
+
+def t_floor(t):
+  return tuple(int(x) for x in t)
+
+def interpolate(w, a, b):
+  if w > 1:
+    w = 1
+
+  if w < 0:
+    w = 0
+
+  return t_floor(t_add(t_mul(a, 1 - w), t_mul(b, w)))
 
 while True:
   mouse = rivalcfg.get_first_mouse()
