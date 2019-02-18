@@ -35,14 +35,16 @@ def interpolate(w, a, b):
 
   return t_floor(t_add(t_mul(a, 1 - w), t_mul(b, w)))
 
-while True:
-  mouse = rivalcfg.get_first_mouse()
-  if mouse:
-    break
+def wait_for_mouse():
+  while True:
+    mouse = rivalcfg.get_first_mouse()
+    if mouse:
+      print("Found mouse: {}".format(mouse))
+      return mouse
 
-  time.sleep(WAIT_TIME)
+    time.sleep(WAIT_TIME)
 
-print("Found mouse: {}".format(mouse))
+mouse = wait_for_mouse()
 
 last_color = (0, 0, 0)
 for (color_time, color) in cycle(config):
@@ -50,10 +52,9 @@ for (color_time, color) in cycle(config):
   while current_color_time < color_time:
     interpolated_color = interpolate(current_color_time / color_time, last_color, color)
 
-    try:
-      mouse.set_color(*interpolated_color)
-    except Exception as e:
-      print("Could not talk to mouse: {}".format(e))
+    result = mouse.set_color(*interpolated_color)
+    if result < 0:
+      mouse = wait_for_mouse()
 
     current_color_time += UPDATE_TIME
     time.sleep(UPDATE_TIME)
