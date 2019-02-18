@@ -39,7 +39,7 @@ def wait_for_mouse():
   while True:
     mouse = rivalcfg.get_first_mouse()
     if mouse:
-      print("Found mouse: {}".format(mouse))
+      print("Found: {}".format(mouse))
       return mouse
 
     time.sleep(WAIT_TIME)
