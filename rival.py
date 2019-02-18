@@ -5,7 +5,8 @@ from itertools import cycle
 
 import rivalcfg
 
-delta = 0.05
+UPDATE_DELTA = 0.05
+WAIT_TIME = 1
 
 config = [
   (5, (0, 0, 255)),
@@ -26,7 +27,7 @@ while True:
   if mouse:
     break
 
-  time.sleep(1)
+  time.sleep(WAIT_TIME)
 
 print("Found mouse: {}".format(mouse))
 
@@ -39,6 +40,6 @@ for (total_time, color) in cycle(config):
       mouse.set_color(*c)
     except Exception as e:
       print("Could not talk to mouse: {}".format(e))
-    t += delta
-    time.sleep(delta)
+    t += UPDATE_DELTA
+    time.sleep(UPDATE_DELTA)
   prev = color
