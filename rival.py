@@ -27,7 +27,7 @@ while True:
   if profile is None:
     time.sleep(1)
   else:
-    print "Found mouse: " + profile["name"]
+    print("Found mouse: {}".format(profile["name"]))
     try:
       instance = mouse.RivalMouse(profile)
       prev = (0, 0, 0)
@@ -39,6 +39,5 @@ while True:
           t += delta
           time.sleep(delta)
         prev = color
-    except Exception, e:
-      print "Could not talk to mouse: " + str(e)
-
+    except Exception as e:
+      print("Could not talk to mouse: {}".format(e))
