@@ -1,3 +1,5 @@
+from rivalcfg.helpers import is_color, color_string_to_rgb
+
 MORSE_CODE_DICT = {
   ' ': '/',
   'a': '.-',

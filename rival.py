@@ -6,8 +6,6 @@ from optparse import OptionParser
 
 import rivalcfg
 
-from rivalcfg.helpers import is_color, color_string_to_rgb
-
 from helpers import text_to_morse, morse_to_config, args_to_config
 
 DEFAULT_UPDATE_TIME = 0.05
