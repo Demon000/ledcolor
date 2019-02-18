@@ -27,9 +27,9 @@ for arg in args:
   duration_string, color_string = arg.split(':')
 
   try:
-    duration = int(duration_string)
+    duration = float(duration_string)
   except ValueError:
-    print('`{}` is not a valid duration.', )
+    print('`{}` is not a valid duration.'.format(duration_string))
     exit()
 
   if not is_color(color_string):
