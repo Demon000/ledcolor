@@ -23,21 +23,22 @@ def interpolate(t, a, b):
 
 while True:
   mouse = rivalcfg.get_first_mouse()
-  if mouse is None:
-    time.sleep(1)
-    continue
+  if mouse:
+    break
 
-  print("Found mouse: {}".format(mouse))
+  time.sleep(1)
 
-  prev = (0, 0, 0)
-  for (total_time, color) in cycle(config):
-    t = 0
-    while t < total_time:
-      c = interpolate(t / total_time, prev, color)
-      try:
-        mouse.set_color(*c)
-      except Exception as e:
-        print("Could not talk to mouse: {}".format(e))
-      t += delta
-      time.sleep(delta)
-    prev = color
+print("Found mouse: {}".format(mouse))
+
+prev = (0, 0, 0)
+for (total_time, color) in cycle(config):
+  t = 0
+  while t < total_time:
+    c = interpolate(t / total_time, prev, color)
+    try:
+      mouse.set_color(*c)
+    except Exception as e:
+      print("Could not talk to mouse: {}".format(e))
+    t += delta
+    time.sleep(delta)
+  prev = color
