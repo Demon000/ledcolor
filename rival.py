@@ -31,15 +31,17 @@ while True:
 
 print("Found mouse: {}".format(mouse))
 
-prev = (0, 0, 0)
-for (total_time, color) in cycle(config):
-  t = 0
-  while t < total_time:
-    c = interpolate(t / total_time, prev, color)
+last_color = (0, 0, 0,)
+for (color_time, color) in cycle(config):
+  current_color_time = 0
+  while current_color_time < color_time:
+    interpolated_color = interpolate(current_color_time / color_time, last_color, color)
+
     try:
-      mouse.set_color(*c)
+      mouse.set_color(*interpolated_color)
     except Exception as e:
       print("Could not talk to mouse: {}".format(e))
-    t += UPDATE_DELTA
+
+    current_color_time += UPDATE_DELTA
     time.sleep(UPDATE_DELTA)
-  prev = color
+  last_color = color
