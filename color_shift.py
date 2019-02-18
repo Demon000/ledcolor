@@ -2,7 +2,7 @@ import time
 
 import rivalcfg
 
-from tuple_helpers import t_mul, t_add, t_int
+from tuple_helpers import t_add_w
 
 class ColorShift():
   def __init__(self, iterator, update_time, wait_time):
@@ -10,15 +10,6 @@ class ColorShift():
     self.__update_time = update_time
     self.__wait_time = wait_time
     self.__mouse = self.__wait_for_mouse()
-
-  def __interpolate(self, w, a, b):
-    if w > 1:
-      w = 1
-
-    if w < 0:
-      w = 0
-
-    return t_int(t_add(t_mul(a, 1 - w), t_mul(b, w)))
 
   def __wait_for_mouse(self):
     while True:
@@ -41,7 +32,7 @@ class ColorShift():
       current_color_time = 0
       while current_color_time < color_time:
         color_weight = current_color_time / color_time
-        interpolated_color = self.__interpolate(color_weight, last_color, color)
+        interpolated_color = t_add_w(last_color, color, color_weight)
 
         self.__set_color(interpolated_color)
 
