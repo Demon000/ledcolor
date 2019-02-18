@@ -11,7 +11,3 @@ pip install -r requirements.txt
 # Running
 
 You can run with `python3 rival.py`
-
-# Usage
-
-
