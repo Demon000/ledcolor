@@ -17,7 +17,7 @@ usage = '%prog [options] [colors]'
 parser = OptionParser(usage=usage, description=description)
 parser.add_option('-u', '--update-time', dest='update_time', default=DEFAULT_UPDATE_TIME, type=float)
 parser.add_option('-w', '--wait-time', dest='wait_time', default=DEFAULT_WAIT_TIME, type=float)
-parser.add_option('-t', '--text', dest='text', type=str)
+parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
 
 (options, args) = parser.parse_args()
 
@@ -25,9 +25,10 @@ values = vars(options)
 
 update_time = values['update_time']
 wait_time = values['wait_time']
-text = values['text']
+is_morse = values['is_morse']
 
-if text:
+if is_morse:
+  text = ' '.join(args)
   morse = text_to_morse(text)
   config = morse_to_config(morse, update_time)
 else:
