@@ -1,3 +1,5 @@
+import time
+
 from color_setter import ColorSetter
 
 from tuple_helpers import t_add_w

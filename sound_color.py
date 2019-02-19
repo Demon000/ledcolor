@@ -1,8 +1,5 @@
 import pyaudio
 import numpy
-import os
-import time
-import datetime
 
 from color_setter import ColorSetter
 
@@ -62,10 +59,6 @@ class SoundColor(ColorSetter):
     for group in freq_groups:
       average = numpy.average(group) / 128
       averages.append(average)
-
-    # os.system('clear')
-    # for average in averages:
-    #   print('{:.2f} {}'.format(average, '#' * int(average * 100)))
 
     volume = numpy.max(averages).item()
     self.__set_volume(volume)
