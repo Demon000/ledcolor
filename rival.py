@@ -4,8 +4,8 @@ from itertools import cycle
 from optparse import OptionParser
 
 from helpers import text_to_morse, morse_to_config, args_to_config
-from sound_iterator import SoundIterator
-from color_shift import ColorShift
+from iterator_color import IteratorColor
+from sound_color import SoundColor
 
 DEFAULT_UPDATE_TIME = 0.05
 DEFAULT_WAIT_TIME = 1
@@ -33,11 +33,12 @@ if is_morse:
   morse = text_to_morse(text)
   config = morse_to_config(morse, update_time)
   iterator = cycle(config)
+  color_shift = IteratorColor(iterator, wait_time, update_time)
 elif is_sound:
-  iterator = SoundIterator()
+  color_shift = SoundColor(wait_time, update_time)
 else:
   config = args_to_config(args)
   iterator = cycle(config)
+  color_shift = IteratorColor(iterator, wait_time, update_time)
 
-color_shift = ColorShift(iterator, update_time, wait_time)
 color_shift.run()
