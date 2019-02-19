@@ -89,7 +89,7 @@ def args_to_config(args):
   config = []
   for arg in args:
     duration_string, color_string = arg.split(':')
-    duration = duration_from_string(duration)
+    duration = duration_from_string(duration_string)
     color = color_from_string(color_string)
     config.append((duration, color)) 
 
