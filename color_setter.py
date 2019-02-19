@@ -26,3 +26,9 @@ class ColorSetter():
 
     if save:
       self._mouse.save()
+
+  def start(self):
+    pass
+
+  def stop(self):
+    pass

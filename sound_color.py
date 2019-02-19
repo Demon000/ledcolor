@@ -18,16 +18,6 @@ class SoundColor(ColorSetter):
     self.__high_color = high_color
     self.__input_index = input_index
 
-    self.__audio = pyaudio.PyAudio()
-    self.__stream = None
-
-  def __del__(self):
-    if self.__stream:
-      self.__stream.stop_stream()
-      self.__stream.close()
-
-    self.__audio.terminate()
-
   def __set_volume(self, volume):
     color = t_add_w(self.__low_color, self.__high_color, volume)
     self._set_color(color, save=False)
@@ -41,10 +31,14 @@ class SoundColor(ColorSetter):
 
     return (raw, pyaudio.paContinue)
 
-  def run(self):
+  def start(self):
+    self.__audio = pyaudio.PyAudio()
     self.__stream = self.__audio.open(format=pyaudio.paInt16,
         input=True, input_device_index=self.__input_index,
         channels=CHANNELS, rate=RATE, frames_per_buffer=self.__chunk_size,
         stream_callback=self.__on_stream_data)
 
-    signal.pause()
+  def stop(self):
+    self.__audio.terminate()
+    self.__stream.stop_stream()
+    self.__stream.close()

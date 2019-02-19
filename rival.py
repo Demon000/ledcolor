@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import signal
+
 from itertools import cycle
 from optparse import OptionParser
 
@@ -38,4 +40,12 @@ else:
   iterator = cycle(config)
   color_setter = IteratorColor(iterator, wait_time, update_time)
 
-color_setter.run()
+color_setter.start()
+
+def stop(*args):
+  color_setter.stop()
+
+for type_ in (signal.SIGABRT, signal.SIGINT, signal.SIGTERM):
+    signal.signal(type_, stop)
+
+signal.pause()

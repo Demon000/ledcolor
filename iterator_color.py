@@ -28,6 +28,6 @@ class IteratorColor(ColorSetter):
 
     self.__prev_color = color
 
-  def run(self):
+  def start(self):
     for color_time, color in self.__iterator:
       self.__shift_color(color_time, color)
