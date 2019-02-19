@@ -33,12 +33,12 @@ if is_morse:
   morse = text_to_morse(text)
   config = morse_to_config(morse, update_time)
   iterator = cycle(config)
-  color_shift = IteratorColor(iterator, wait_time, update_time)
+  color_setter = IteratorColor(iterator, wait_time, update_time)
 elif is_sound:
-  color_shift = SoundColor(wait_time, update_time)
+  color_setter = SoundColor(wait_time, update_time)
 else:
   config = args_to_config(args)
   iterator = cycle(config)
-  color_shift = IteratorColor(iterator, wait_time, update_time)
+  color_setter = IteratorColor(iterator, wait_time, update_time)
 
-color_shift.run()
+color_setter.run()
