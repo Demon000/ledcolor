@@ -97,14 +97,3 @@ def args_to_config(args):
     raise Exception('No colors have been supplied.')
 
   return config
-
-def args_to_colors(args):
-  colors = []
-  for arg in args:
-    color = color_from_string(arg)
-    colors.append(color)
-
-  if not len(colors):
-    raise Exception('No colors have been supplied.')
-
-  return colors

@@ -3,7 +3,7 @@
 from itertools import cycle
 from optparse import OptionParser
 
-from helpers import text_to_morse, morse_to_config, args_to_config, args_to_colors
+from helpers import text_to_morse, morse_to_config, args_to_config, color_from_string
 from iterator_color import IteratorColor
 from sound_color import SoundColor
 
@@ -15,14 +15,17 @@ parser.add_option('-u', '--update-time', dest='update_time', default=0.05, type=
 parser.add_option('-w', '--wait-time', dest='wait_time', default=1, type=float)
 parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
 parser.add_option('-s', '--sound', action="store_true", dest='is_sound')
+parser.add_option('-L', '--low', dest='low_color_string', default='#00ff00', type=str)
+parser.add_option('-H', '--high', dest='high_color_string', default='#ff0000', type=str)
 
 options, args = parser.parse_args()
 wait_time = options.wait_time
 update_time = options.update_time
 
 if options.is_sound:
-  colors = args_to_colors(args)
-  color_setter = SoundColor(wait_time, update_time, colors)
+  low_color = color_from_string(options.low_color_string)
+  high_color = color_from_string(options.high_color_string)
+  color_setter = SoundColor(wait_time, update_time, low_color, high_color)
 else:
   if options.is_morse:
     text = ' '.join(args)
