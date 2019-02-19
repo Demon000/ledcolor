@@ -1,6 +1,7 @@
 import pyaudio
 import numpy
 import time
+import signal
 
 from color_setter import ColorSetter
 
@@ -45,5 +46,4 @@ class SoundColor(ColorSetter):
         channels=CHANNELS, rate=RATE, frames_per_buffer=self.__chunk_size,
         stream_callback=self.__on_stream_data)
 
-    while True:
-      time.sleep(10)
+    signal.pause()
