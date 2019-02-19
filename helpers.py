@@ -91,7 +91,9 @@ def args_to_config(args):
     duration_string, color_string = arg.split(':')
     duration = duration_from_string(duration)
     color = color_from_string(color_string)
-
     config.append((duration, color)) 
+
+  if not len(config):
+    raise Exception('No colors have been supplied.')
 
   return config
