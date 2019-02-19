@@ -71,20 +71,27 @@ def morse_to_config(morse, update_time):
 
   return config
 
+def duration_from_string(duration_string):
+  try:
+    duration = float(duration_string)
+  except ValueError:
+    raise Exception('`{}` is not a valid duration.'.format(duration_string))
+
+  return duration
+
+def color_from_string(color_string):
+  if not is_color(color_string):
+    raise Exception('`{}` is not a valid color.'.format(color_string))
+
+  return color_string_to_rgb(color_string)
+
 def args_to_config(args):
   config = []
   for arg in args:
     duration_string, color_string = arg.split(':')
+    duration = duration_from_string(duration)
+    color = color_from_string(color_string)
 
-    try:
-      duration = float(duration_string)
-    except ValueError:
-      raise Exception('`{}` is not a valid duration.'.format(duration_string))
-
-    if not is_color(color_string):
-      raise Exception('`{}` is not a valid color.'.format(color_string))
-
-    color = color_string_to_rgb(color_string)
     config.append((duration, color)) 
 
   return config

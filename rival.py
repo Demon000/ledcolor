@@ -3,7 +3,7 @@
 from itertools import cycle
 from optparse import OptionParser
 
-from helpers import text_to_morse, morse_to_config, args_to_config
+from helpers import text_to_morse, morse_to_config, args_to_config, color_from_string
 from iterator_color import IteratorColor
 from sound_color import SoundColor
 
@@ -18,20 +18,19 @@ parser.add_option('-u', '--update-time', dest='update_time', default=DEFAULT_UPD
 parser.add_option('-w', '--wait-time', dest='wait_time', default=DEFAULT_WAIT_TIME, type=float)
 parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
 parser.add_option('-s', '--sound', action="store_true", dest='is_sound')
+parser.add_option('-L', '--low', dest='low_color_string', default='#00ff00', type=str)
+parser.add_option('-H', '--high', dest='high_color_string', default='#ff0000', type=str)
 
 options, args = parser.parse_args()
+wait_time = options.wait_time
+update_time = options.update_time
 
-values = vars(options)
-
-update_time = values['update_time']
-wait_time = values['wait_time']
-is_morse = values['is_morse']
-is_sound = values['is_sound']
-
-if is_sound:
-  color_setter = SoundColor(wait_time, update_time)
+if options.is_sound:
+  low_color = color_from_string(options.low_color_string)
+  high_color = color_from_string(options.high_color_string)
+  color_setter = SoundColor(wait_time, update_time, low_color, high_color)
 else:
-  if is_morse:
+  if options.is_morse:
     text = ' '.join(args)
     morse = text_to_morse(text)
     config = morse_to_config(morse, update_time)

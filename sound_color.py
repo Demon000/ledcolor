@@ -8,14 +8,15 @@ from tuple_helpers import t_add_w
 
 CHANNELS = 1
 RATE = 44100
-LOW = (0, 255, 0)
-HIGH = (255, 0, 0)
 
 class SoundColor(ColorSetter):
-  def __init__(self, wait_time, update_time):
+  def __init__(self, wait_time, update_time, low_color, high_color):
     super().__init__(wait_time)
 
     self.__chunk_size = int(RATE * update_time)
+    self.__low_color = low_color
+    self.__high_color = high_color
+
     self.__audio = pyaudio.PyAudio()
     self.__stream = None
 
@@ -27,7 +28,7 @@ class SoundColor(ColorSetter):
     self.__audio.terminate()
 
   def __set_volume(self, volume):
-    color = t_add_w(LOW, HIGH, volume)
+    color = t_add_w(self.__low_color, self.__high_color, volume)
     self._set_color(color, save=False)
 
   def __on_stream_data(self, raw, frame_count, time_info, status):
