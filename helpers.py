@@ -88,10 +88,11 @@ def color_from_string(color_string):
 def args_to_config(args):
   config = []
   for arg in args:
-    duration_string, color_string = arg.split(':')
-    duration = duration_from_string(duration_string)
+    color_string, on_duration_string, fade_duration_string = arg.split(':')
     color = color_from_string(color_string)
-    config.append((duration, color)) 
+    on_duration = duration_from_string(on_duration_string)
+    fade_duration = duration_from_string(fade_duration_string)
+    config.append((color, on_duration, fade_duration))
 
   if not len(config):
     raise Exception('No colors have been supplied.')

@@ -9,10 +9,19 @@ from helpers import text_to_morse, morse_to_config, args_to_config, color_from_s
 from iterator_color import IteratorColor
 from sound_color import SoundColor
 
-description = 'Colors: a list of colors to cycle through, ' + \
-    'for example: 1:#ff0000 0.5:ff0000 2:#f00 0.5:f00 3:red'
-usage = '%prog [options] [colors]'
-parser = OptionParser(usage=usage, description=description)
+usage = """%prog [options] [colors]
+
+Colors: a list of colors to cycle through, defined in the following format
+  color_string:on_duration:fade_duration
+
+  Where color_string is in one of the following formats:
+  #ffffff ffffff #fff fff
+
+  Where on_duration and fade_duration are floating point values representing
+  the number of seconds the color stays on and fades out, respectively.
+"""
+
+parser = OptionParser(usage=usage)
 parser.add_option('-u', '--update-time', dest='update_time', default=0.05, type=float)
 parser.add_option('-w', '--wait-time', dest='wait_time', default=1, type=float)
 parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
