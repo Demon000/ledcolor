@@ -9,7 +9,11 @@ class ColorSetter():
 
   def _wait_for_mouse(self):
     while True:
-      mouse = rivalcfg.get_first_mouse()
+      try:
+        mouse = rivalcfg.get_first_mouse()
+      except OSError:
+        mouse = None
+
       if mouse:
         return mouse
 
