@@ -31,11 +31,10 @@ else:
     text = ' '.join(args)
     morse = text_to_morse(text)
     config = morse_to_config(morse, update_time)
-    iterator = cycle(config)
   else:
     config = args_to_config(args)
-    iterator = cycle(config)
 
+  iterator = cycle(config)
   color_setter = IteratorColor(iterator, wait_time, update_time)
 
 color_setter.run()
