@@ -21,7 +21,11 @@ class IteratorColor(ColorSetter):
   def __fade_color(self, old_color, new_color, duration):
     left_duration = duration
     while left_duration >= 0:
-      color_weight = left_duration / duration
+      if duration:
+        color_weight = left_duration / duration
+      else:
+        color_weight = 1
+
       mixed_color = self.__get_mixed_color(new_color, old_color, color_weight)
 
       self._set_color(mixed_color)
