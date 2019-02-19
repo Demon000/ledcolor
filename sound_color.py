@@ -10,12 +10,13 @@ CHANNELS = 1
 RATE = 44100
 
 class SoundColor(ColorSetter):
-  def __init__(self, wait_time, update_time, low_color, high_color):
+  def __init__(self, wait_time, update_time, low_color, high_color, input_index=None):
     super().__init__(wait_time)
 
     self.__chunk_size = int(RATE * update_time)
     self.__low_color = low_color
     self.__high_color = high_color
+    self.__input_index = input_index
 
     self.__audio = pyaudio.PyAudio()
     self.__stream = None
@@ -41,7 +42,8 @@ class SoundColor(ColorSetter):
     return (raw, pyaudio.paContinue)
 
   def run(self):
-    self.__stream = self.__audio.open(format=pyaudio.paInt16, input=True,
+    self.__stream = self.__audio.open(format=pyaudio.paInt16,
+        input=True, input_device_index=self.__input_index,
         channels=CHANNELS, rate=RATE, frames_per_buffer=self.__chunk_size,
         stream_callback=self.__on_stream_data)
 

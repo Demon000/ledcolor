@@ -17,6 +17,7 @@ parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
 parser.add_option('-s', '--sound', action="store_true", dest='is_sound')
 parser.add_option('-L', '--low', dest='low_color_string', default='#00ff00', type=str)
 parser.add_option('-H', '--high', dest='high_color_string', default='#ff0000', type=str)
+parser.add_option('-i', '--input', dest='input_index', type=int)
 
 options, args = parser.parse_args()
 wait_time = options.wait_time
@@ -25,7 +26,7 @@ update_time = options.update_time
 if options.is_sound:
   low_color = color_from_string(options.low_color_string)
   high_color = color_from_string(options.high_color_string)
-  color_setter = SoundColor(wait_time, update_time, low_color, high_color)
+  color_setter = SoundColor(wait_time, update_time, low_color, high_color, options.input_index)
 else:
   if options.is_morse:
     text = ' '.join(args)
