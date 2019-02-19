@@ -32,37 +32,11 @@ class SoundColor(ColorSetter):
 
   def __on_stream_data(self, raw, frame_count, time_info, status):
     data = numpy.frombuffer(raw, dtype=numpy.int16)
+    data = numpy.abs(data)
 
-    fft = numpy.fft.rfft(data)
-    fft = numpy.abs(fft)
-
-    freq = numpy.fft.rfftfreq(self.__chunk_size, 1 / RATE)
-
-    freq_limits = [60, 250, 500, 2000, 4000, 6000]
-    freq_groups = [[], [], [], [], [], [], []]
-
-    current_index = 0
-    max_index = len(fft)
-    while current_index < max_index:
-      current_freq = freq[current_index]
-      current_amplitude = fft[current_index] / RATE
-
-      limit_index = 0
-      max_limit_index = len(freq_limits)
-      while limit_index < max_limit_index and \
-          current_freq >= freq_limits[limit_index]:
-        limit_index += 1
-
-      freq_groups[limit_index].append(current_amplitude)
-      current_index += 1
-
-    averages = []
-    for group in freq_groups:
-      average = numpy.average(group) / 128
-      averages.append(average)
-
-    volume = numpy.max(averages).item()
+    volume = numpy.max(data) / 2**15
     self.__set_volume(volume)
+
     return (raw, pyaudio.paContinue)
 
   def run(self):
