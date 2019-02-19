@@ -1,6 +1,5 @@
 import pyaudio
 import numpy
-import time
 import signal
 
 from color_setter import ColorSetter
