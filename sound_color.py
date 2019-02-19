@@ -7,7 +7,7 @@ from color_setter import ColorSetter
 from tuple_helpers import t_add_w
 
 CHANNELS = 1
-RATE = 44100
+RATE = 48000
 
 class SoundColor(ColorSetter):
   def __init__(self, wait_time, update_time, low_color, high_color, input_index=None):
