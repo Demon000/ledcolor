@@ -28,17 +28,18 @@ wait_time = values['wait_time']
 is_morse = values['is_morse']
 is_sound = values['is_sound']
 
-if is_morse:
-  text = ' '.join(args)
-  morse = text_to_morse(text)
-  config = morse_to_config(morse, update_time)
-  iterator = cycle(config)
-  color_setter = IteratorColor(iterator, wait_time, update_time)
-elif is_sound:
+if is_sound:
   color_setter = SoundColor(wait_time, update_time)
 else:
-  config = args_to_config(args)
-  iterator = cycle(config)
+  if is_morse:
+    text = ' '.join(args)
+    morse = text_to_morse(text)
+    config = morse_to_config(morse, update_time)
+    iterator = cycle(config)
+  else:
+    config = args_to_config(args)
+    iterator = cycle(config)
+
   color_setter = IteratorColor(iterator, wait_time, update_time)
 
 color_setter.run()
