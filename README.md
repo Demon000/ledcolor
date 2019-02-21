@@ -27,3 +27,7 @@ Details about usage are available using:
 To get the sound syncing feature working, start the program using the `-s`
 option, then open `pavucontrol`, press on the `Recording` tab, and switch
 captured device to your output's monitor.
+
+Alternatively, you can install `pulseaudio-alsa` and then follow the steps
+(here)[https://wiki.archlinux.org/index.php/PulseAudio/Examples#ALSA_monitor_source],
+and then specify the `-i` option with the value of your defined source, eg. `pulse_monitor`.
