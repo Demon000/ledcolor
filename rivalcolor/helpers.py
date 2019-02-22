@@ -33,10 +33,10 @@ MORSE_CODE_DICT = {
 }
 
 def get_light_color(on_duration):
-  return AnimatedColor(0, on_duration, (255, 255, 255))
+  return AnimatedColor(on_duration, 0, (255, 255, 255))
 
 def get_dark_color(on_duration):
-  return AnimatedColor(0, on_duration, (0, 0, 0))
+  return AnimatedColor(on_duration, 0, (0, 0, 0))
 
 def get_morse_char_colors(on_duration):
   return {
