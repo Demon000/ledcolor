@@ -17,22 +17,17 @@ class Color():
   def rgb(self):
       return self._rgb
 
-class TimedColor(Color):
-  def __init__(self, on, *args):
+class AnimatedColor(Color):
+  def __init__(self, on_duration, fade_duration, *args):
     super().__init__(*args)
 
-    self._on = on
+    self.__on_duration = on_duration
+    self.__fade_duration = fade_duration
 
   @property
   def on_duration(self):
-      return self._on
-
-class FadingColor(TimedColor):
-  def __init__(self, fade, *args):
-    super().__init__(*args)
-
-    self.__fade = fade
+      return self.__on_duration
 
   @property
   def fade_duration(self):
-    return self.__fade
+    return self.__fade_duration

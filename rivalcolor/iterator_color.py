@@ -10,5 +10,5 @@ class IteratorColor(ColorSetter):
     color = next(self.__iterator)
     while True:
       next_color = next(self.__iterator)
-      self._set_fading_color(color, next_color)
+      self._set_animated_color(color, next_color)
       color = next_color
