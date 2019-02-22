@@ -1,5 +1,7 @@
 from rivalcfg.helpers import is_color, color_string_to_rgb
 
+from color import Color, FadingColor
+
 MORSE_CODE_DICT = {
   ' ': '/',
   'a': '.-',
@@ -30,18 +32,18 @@ MORSE_CODE_DICT = {
   'z': '--..',
 }
 
-def LIGHT(update_time):
-  return [(update_time, (255, 255, 255))]
+def get_light_color(on_duration):
+  return FadingColor(0, on_duration, 255, 255, 255)
 
-def DARK(update_time):
-  return [(update_time, (0, 0, 0))]
+def get_dark_color(on_duration):
+  return FadingColor(0, on_duration, 0, 0, 0)
 
-def MORSE_LIGHT_DICT(light, dark):
+def get_morse_char_colors(on_duration):
   return {
-    '.': light,
-    '-': light * 3,
-    ' ': dark * 3,
-    '/': dark * 7,
+    '.': get_light_color(on_duration),
+    '-': get_light_color(on_duration * 3),
+    ' ': get_dark_color(on_duration * 3),
+    '/': get_dark_color(on_duration * 7),
   }
 
 def text_to_morse(s):
@@ -57,19 +59,19 @@ def text_to_morse(s):
 
   return ' '.join(morse)
 
-def morse_to_config(morse, update_time):
-  light = LIGHT(update_time)
-  dark = DARK(update_time)
-  morse_light_dict = MORSE_LIGHT_DICT(light, dark)
+def morse_to_colors(morse, on_duration):
+  morse_light_dict = get_morse_char_colors(on_duration)
+  start = get_dark_color(on_duration * 8)
+  separator = get_dark_color(on_duration)
 
-  config = []
-  config.extend(dark * 8)
+  colors = []
+  colors.append(start)
   for char in morse:
-    colors = morse_light_dict[char]
-    config.extend(colors)
-    config.extend(dark)
+    char_colors = morse_light_dict[char]
+    colors.append(char_colors)
+    colors.append(separator)
 
-  return config
+  return colors
 
 def duration_from_string(duration_string):
   try:
@@ -79,22 +81,29 @@ def duration_from_string(duration_string):
 
   return duration
 
-def color_from_string(color_string):
+def rgb_from_string(color_string):
   if not is_color(color_string):
     raise Exception('`{}` is not a valid color.'.format(color_string))
 
   return color_string_to_rgb(color_string)
 
-def args_to_config(args):
-  config = []
+def color_from_string(color_string):
+  r, g, b = rgb_from_string(color_string)
+  return Color(r, g, b)
+
+def args_to_colors(args):
+  colors = []
   for arg in args:
     color_string, on_duration_string, fade_duration_string = arg.split(':')
-    color = color_from_string(color_string)
+
+    r, g, b = rgb_from_string(color_string)
     on_duration = duration_from_string(on_duration_string)
     fade_duration = duration_from_string(fade_duration_string)
-    config.append((color, on_duration, fade_duration))
 
-  if not len(config):
+    color = FadingColor(fade_duration, on_duration, r, g, b)
+    colors.append(color)
+
+  if not len(colors):
     raise Exception('No colors have been supplied.')
 
-  return config
+  return colors

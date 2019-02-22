@@ -3,15 +3,14 @@ import numpy
 import signal
 
 from color_setter import ColorSetter
-
-from tuple_helpers import t_add_w
+from color import MixedColor
 
 CHANNELS = 1
 RATE = 48000
 
 class SoundColor(ColorSetter):
-  def __init__(self, wait_time, update_time, low_color, high_color, input_name):
-    super().__init__(wait_time)
+  def __init__(self, low_color, high_color, input_name, wait_time, update_time):
+    super().__init__(wait_time, update_time)
 
     self.__chunk_size = int(RATE * update_time)
     self.__low_color = low_color
@@ -19,8 +18,8 @@ class SoundColor(ColorSetter):
     self.__input_name = input_name
 
   def __set_volume(self, volume):
-    color = t_add_w(self.__low_color, self.__high_color, volume)
-    self._set_color(color, save=False)
+    color = MixedColor(self.__low_color, self.__high_color, volume)
+    self._set_color(color)
 
   def __on_stream_data(self, raw, frame_count, time_info, status):
     data = numpy.frombuffer(raw, dtype=numpy.int16)

@@ -3,7 +3,7 @@ import signal
 from itertools import cycle
 from optparse import OptionParser
 
-from helpers import text_to_morse, morse_to_config, args_to_config, color_from_string
+from helpers import text_to_morse, morse_to_colors, args_to_colors, color_from_string
 from iterator_color import IteratorColor
 from sound_color import SoundColor
 
@@ -36,17 +36,17 @@ def main():
   if options.is_sound:
     low_color = color_from_string(options.low_color_string)
     high_color = color_from_string(options.high_color_string)
-    color_setter = SoundColor(wait_time, update_time, low_color, high_color, options.input_name)
+    color_setter = SoundColor(low_color, high_color, options.input_name, wait_time, update_time)
   else:
     if options.is_morse:
       text = ' '.join(args)
       morse = text_to_morse(text)
-      config = morse_to_config(morse, update_time)
+      colors = morse_to_colors(morse, update_time)
     else:
-      config = args_to_config(args)
+      colors = args_to_colors(args)
 
-    iterator = cycle(config)
-    color_setter = IteratorColor(iterator, wait_time, update_time)
+    colors_iterator = cycle(colors)
+    color_setter = IteratorColor(colors_iterator, wait_time, update_time)
 
   color_setter.start()
 
