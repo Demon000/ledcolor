@@ -3,7 +3,7 @@ import numpy
 import signal
 
 from color_setter import ColorSetter
-from color import MixedColor
+from color import Color
 
 CHANNELS = 1
 RATE = 48000
@@ -18,7 +18,7 @@ class SoundColor(ColorSetter):
     self.__input_name = input_name
 
   def __set_volume(self, volume):
-    color = MixedColor(self.__low_color, self.__high_color, volume)
+    color = Color(self.__low_color.rgb, self.__high_color.rgb, volume)
     self._set_color(color)
 
   def __on_stream_data(self, raw, frame_count, time_info, status):

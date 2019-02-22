@@ -33,10 +33,10 @@ MORSE_CODE_DICT = {
 }
 
 def get_light_color(on_duration):
-  return FadingColor(0, on_duration, 255, 255, 255)
+  return FadingColor(0, on_duration, (255, 255, 255))
 
 def get_dark_color(on_duration):
-  return FadingColor(0, on_duration, 0, 0, 0)
+  return FadingColor(0, on_duration, (0, 0, 0))
 
 def get_morse_char_colors(on_duration):
   return {
@@ -88,19 +88,19 @@ def rgb_from_string(color_string):
   return color_string_to_rgb(color_string)
 
 def color_from_string(color_string):
-  r, g, b = rgb_from_string(color_string)
-  return Color(r, g, b)
+  rgb = rgb_from_string(color_string)
+  return Color(rgb)
 
 def args_to_colors(args):
   colors = []
   for arg in args:
     color_string, on_duration_string, fade_duration_string = arg.split(':')
 
-    r, g, b = rgb_from_string(color_string)
+    rgb = rgb_from_string(color_string)
     on_duration = duration_from_string(on_duration_string)
     fade_duration = duration_from_string(fade_duration_string)
 
-    color = FadingColor(fade_duration, on_duration, r, g, b)
+    color = FadingColor(fade_duration, on_duration, rgb)
     colors.append(color)
 
   if not len(colors):

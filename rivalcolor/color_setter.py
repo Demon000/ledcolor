@@ -2,7 +2,7 @@ import time
 
 import rivalcfg
 
-from color import MixedTimedColor
+from color import TimedColor
 
 class ColorSetter():
   def __init__(self, wait_time, update_time):
@@ -34,17 +34,18 @@ class ColorSetter():
   def _set_fading_color(self, color, into_color):
     self._set_timed_color(color)
 
-    left_duration = color.fade_duration
-    while left_duration >= 0:
-      if color.fade_duration:
-        color_weight = 1 - left_duration / color.fade_duration
-      else:
-        color_weight = 0
+    fade_duration = color.fade_duration
+    if not fade_duration:
+      return
 
-      mixed_color = MixedTimedColor(self._update_time, color, into_color, color_weight)
+    elapsed_time = 0
+    while elapsed_time <= fade_duration:
+      weight = 1 - elapsed_time / fade_duration
 
-      left_duration -= self._update_time
+      mixed_color = TimedColor(self._update_time, color.rgb, into_color.rgb, weight)
       self._set_timed_color(mixed_color)
+
+      elapsed_time += self._update_time
 
   def start(self):
     pass

@@ -1,8 +1,11 @@
 from tuple_helpers import t_add_w
 
 class Color():
-  def __init__(self, r, g, b):
-    self._rgb = (r, g, b)
+  def __init__(self, rgb=None, into_rgb=None, weight=None):
+    if into_rgb:
+      self._rgb = t_add_w(rgb, into_rgb, weight)
+    else:
+      self._rgb = rgb
 
   @property
   def rgb(self):
@@ -17,18 +20,6 @@ class TimedColor(Color):
   @property
   def on_duration(self):
       return self._on
-
-class MixedColor(Color):
-  def __init__(self, color, into_color, weight):
-    r, g, b = t_add_w(color.rgb, into_color.rgb, weight)
-
-    super().__init__(r, g, b)
-
-class MixedTimedColor(TimedColor):
-  def __init__(self, on, color, into_color, weight):
-    r, g, b = t_add_w(color.rgb, into_color.rgb, weight)
-
-    super().__init__(on, r, g, b)
 
 class FadingColor(TimedColor):
   def __init__(self, fade, *args):
