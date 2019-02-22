@@ -1,7 +1,13 @@
 from tuple_helpers import t_add_w
 
 class Color():
-  def __init__(self, rgb=None, into_rgb=None, weight=None):
+  def __init__(self, rgb, into_rgb=None, weight=None):
+    if type(rgb) is Color:
+      rgb = rgb.rgb
+
+    if type(into_rgb) is Color:
+      into_rgb = into_rgb.rgb
+
     if into_rgb:
       self._rgb = t_add_w(rgb, into_rgb, weight)
     else:

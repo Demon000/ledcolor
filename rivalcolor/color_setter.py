@@ -45,7 +45,7 @@ class ColorSetter():
     while elapsed_time <= fade_duration:
       weight = elapsed_time / fade_duration
 
-      mixed_color = TimedColor(self._update_time, color.rgb, into_color.rgb, weight)
+      mixed_color = TimedColor(self._update_time, color, into_color, weight)
       self._set_timed_color(mixed_color)
 
       elapsed_time += self._update_time

@@ -17,7 +17,7 @@ class SoundColor(ColorSetter):
     self.__input_name = input_name
 
   def __set_volume(self, volume):
-    color = Color(self.__low_color.rgb, self.__high_color.rgb, volume)
+    color = Color(self.__low_color, self.__high_color, volume)
     self._set_color(color)
 
   def __on_stream_data(self, raw, frame_count, time_info, status):
