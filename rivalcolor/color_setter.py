@@ -28,6 +28,9 @@ class ColorSetter():
       self._mouse = self._wait_for_mouse()
 
   def _set_timed_color(self, color):
+    if color.on_duration == 0:
+      return
+
     self._set_color(color)
     time.sleep(color.on_duration)
 
