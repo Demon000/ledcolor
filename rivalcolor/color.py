@@ -2,10 +2,10 @@ from tuple_helpers import t_add_w
 
 class Color():
   def __init__(self, rgb, into_rgb=None, weight=None):
-    if type(rgb) is Color:
+    if isinstance(rgb, Color):
       rgb = rgb.rgb
 
-    if type(into_rgb) is Color:
+    if isinstance(into_rgb, Color):
       into_rgb = into_rgb.rgb
 
     if into_rgb:
