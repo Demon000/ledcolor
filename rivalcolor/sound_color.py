@@ -1,6 +1,5 @@
 import pyaudio
 import numpy
-import signal
 
 from color_setter import ColorSetter
 from color import Color
