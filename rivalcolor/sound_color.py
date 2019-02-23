@@ -3,9 +3,7 @@ import numpy
 
 from color_setter import ColorSetter
 from color import Color
-
-CHANNELS = 1
-RATE = 48000
+from constants import audio_channels, audio_rate
 
 class SoundColor(ColorSetter):
   def __init__(self, low_color, high_color, input_name, wait_time, update_time):
@@ -45,7 +43,8 @@ class SoundColor(ColorSetter):
     input_index = self.__find_input_index()
     self.__stream = self.__audio.open(format=pyaudio.paInt16,
         input=True, input_device_index=input_index,
-        channels=CHANNELS, rate=RATE, frames_per_buffer=self.__chunk_size,
+        channels=audio_channels, rate=audio_rate,
+        frames_per_buffer=self.__chunk_size,
         stream_callback=self.__on_stream_data)
 
   def stop(self):
