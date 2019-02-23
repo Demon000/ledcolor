@@ -8,7 +8,7 @@ class IteratorColor(ColorSetter):
 
     self.__iterator = iterator
     self.__stopped = False
-    self.__thread = Thread(target=self.__animation_work)
+    self.__thread = Thread(target=self.__animation_work, daemon=True)
 
   def __animation_work(self):
     color = next(self.__iterator)
