@@ -5,11 +5,12 @@ import rivalcfg
 from color import AnimatedColor
 
 class ColorSetter():
-  def __init__(self, wait_time, update_time):
-    self._wait_time = wait_time
-    self._update_time = update_time
+  def __init__(self, config):
+    self._wait_time = config.wait_time
+    self._update_time = config.update_time
 
     self._mouse = None
+    self._stopped = False
 
   def _wait_for_mouse(self):
     while True:
@@ -43,7 +44,7 @@ class ColorSetter():
       return
 
     elapsed_time = 0
-    while elapsed_time <= color.fade_duration:
+    while elapsed_time <= color.fade_duration and not self._stopped:
       weight = elapsed_time / color.fade_duration
 
       mixed_color = AnimatedColor(self._update_time, 0, color, into_color, weight)
@@ -59,4 +60,6 @@ class ColorSetter():
     pass
 
   def stop(self):
-    pass
+    del self._mouse
+    self._mouse = None
+    self._stopped = True

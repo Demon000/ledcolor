@@ -1,11 +1,24 @@
-import signal
+import socket
 
-from itertools import cycle
 from optparse import OptionParser
 
-from helpers import text_to_morse, morse_to_colors, args_to_colors, color_from_string
-from iterator_color import IteratorColor
-from sound_color import SoundColor
+from config import Config
+from constants import server_address
+
+class Client():
+  def __init__(self, address):
+    self.__address = address
+    self.__client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+  def send_config(self, config):
+    config_data = config.serialize()
+    self.__client.sendall(config_data)
+
+  def start(self):
+    self.__client.connect(self.__address)
+
+  def stop(self):
+    self.__client.close()
 
 def main():
   usage = """%prog [options] [colors]
@@ -30,33 +43,12 @@ def main():
   parser.add_option('-i', '--input', dest='input_name', type=str)
 
   options, args = parser.parse_args()
-  wait_time = options.wait_time
-  update_time = options.update_time
+  config = Config(options, args)
+  client = Client(server_address)
 
-  if options.is_sound:
-    low_color = color_from_string(options.low_color_string)
-    high_color = color_from_string(options.high_color_string)
-    color_setter = SoundColor(low_color, high_color, options.input_name, wait_time, update_time)
-  else:
-    if options.is_morse:
-      text = ' '.join(args)
-      morse = text_to_morse(text)
-      colors = morse_to_colors(morse, update_time)
-    else:
-      colors = args_to_colors(args)
-
-    colors_iterator = cycle(colors)
-    color_setter = IteratorColor(colors_iterator, wait_time, update_time)
-
-  color_setter.start()
-
-  def stop(*args):
-    color_setter.stop()
-
-  for type_ in (signal.SIGABRT, signal.SIGINT, signal.SIGTERM):
-    signal.signal(type_, stop)
-
-  signal.pause()
+  client.start()
+  client.send_config(config)
+  client.stop()
 
 if __name__ == "__main__":
   main()

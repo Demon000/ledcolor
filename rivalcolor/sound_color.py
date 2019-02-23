@@ -6,13 +6,13 @@ from color import Color
 from constants import audio_channels, audio_rate
 
 class SoundColor(ColorSetter):
-  def __init__(self, low_color, high_color, input_name, wait_time, update_time):
-    super().__init__(wait_time, update_time)
+  def __init__(self, config):
+    super().__init__(config)
 
-    self.__chunk_size = int(RATE * update_time)
-    self.__low_color = low_color
-    self.__high_color = high_color
-    self.__input_name = input_name
+    self.__chunk_size = int(audio_rate * config.update_time)
+    self.__low_color = config.low_color
+    self.__high_color = config.high_color
+    self.__input_name = config.input_name
 
   def __set_volume(self, volume):
     color = Color(self.__low_color, self.__high_color, volume)
