@@ -31,6 +31,6 @@ class Led():
 
       elapsed_time += self._update_time
 
-  def _set_animated_color(self, color, into_color):
+  def _do_animated_color(self, color, into_color):
     self._do_on_color(color)
     self._do_fade_color(color, into_color)

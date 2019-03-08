@@ -13,7 +13,7 @@ class IteratorLed(Led):
     color = next(self.__iterator)
     while not self._stopped:
       next_color = next(self.__iterator)
-      self._set_animated_color(color, next_color)
+      self._do_animated_color(color, next_color)
       color = next_color
 
   def start(self):
