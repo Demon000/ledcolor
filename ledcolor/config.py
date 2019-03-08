@@ -5,7 +5,6 @@ from helpers import text_to_morse, morse_to_colors, args_to_colors, color_from_s
 
 class Config():
   def __init__(self, options, args):
-    self.wait_time = options.wait_time
     self.update_time = options.update_time
 
     self.is_sound = False
