@@ -26,7 +26,7 @@ class AnimatedColor(Color):
 
   @property
   def on_duration(self):
-      return self.__on_duration
+    return self.__on_duration
 
   @property
   def fade_duration(self):
