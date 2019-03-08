@@ -1,8 +1,8 @@
 from threading import Thread
 
-from color_setter import ColorSetter
+from led import Led
 
-class IteratorColor(ColorSetter):
+class IteratorLed(Led):
   def __init__(self, config):
     super().__init__(config)
 

@@ -1,5 +1,5 @@
-This project allows Rival mouses to transition between multiple colors of your choice.
-Also, morse, and sound-based lighting.
+This project allows animating leds based on your choice of colors and timing,
+on the morse representation of words and on the volume of the sound currently playing.
 
 # Dependencies
 

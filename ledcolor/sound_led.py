@@ -1,11 +1,11 @@
 import pyaudio
 import numpy
 
-from color_setter import ColorSetter
+from led import Led
 from color import Color
 from constants import audio_channels, audio_rate
 
-class SoundColor(ColorSetter):
+class SoundLed(Led):
   def __init__(self, config):
     super().__init__(config)
 
