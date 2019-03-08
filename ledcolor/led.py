@@ -23,7 +23,7 @@ class Led():
       return
 
     elapsed_time = 0
-    while elapsed_time <= color.fade_duration and not self._stopped:
+    while elapsed_time <= color.fade_duration:
       weight = elapsed_time / color.fade_duration
 
       mixed_color = AnimatedColor(self._update_time, 0, color, into_color, weight)
