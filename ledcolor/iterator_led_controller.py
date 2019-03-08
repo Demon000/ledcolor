@@ -12,7 +12,7 @@ class IteratorLedController():
     color = next(self.__iterator)
     while not self.__stopped:
       next_color = next(self.__iterator)
-      self.__leds.for_each_led('do_animated_color', color, next_color)
+      self.__leds.for_each_led('do_animated_color', color, next_color, self.__update_time)
       color = next_color
 
   def start(self):
