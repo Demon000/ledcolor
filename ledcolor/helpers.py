@@ -100,7 +100,7 @@ def args_to_colors(args):
     on_duration = duration_from_string(on_duration_string)
     fade_duration = duration_from_string(fade_duration_string)
 
-    color = AnimatedColor(fade_duration, on_duration, rgb)
+    color = AnimatedColor(on_duration, fade_duration, rgb)
     colors.append(color)
 
   if not len(colors):
