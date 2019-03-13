@@ -1,14 +1,12 @@
 import pyaudio
 import numpy
 
-from led import Led
 from color import Color
 from constants import audio_channels, audio_rate
 
-class SoundLed(Led):
-  def __init__(self, config):
-    super().__init__(config)
-
+class SoundLedController():
+  def __init__(self, leds, config):
+    self.__leds = leds
     self.__chunk_size = int(audio_rate * config.update_time)
     self.__low_color = config.low_color
     self.__high_color = config.high_color
@@ -16,7 +14,7 @@ class SoundLed(Led):
 
   def __set_volume(self, volume):
     color = Color(self.__low_color, self.__high_color, volume)
-    self._set_color(color)
+    self.__leds.for_each_led('set_color', color)
 
   def __on_stream_data(self, raw, frame_count, time_info, status):
     data = numpy.frombuffer(raw, dtype=numpy.int16)
