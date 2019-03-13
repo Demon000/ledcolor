@@ -23,8 +23,8 @@ def rgb_from_string(string):
 
   raise Exception('`{}` is not a valid color.'.format(string))
 
-def color_from_string(color_string):
-  rgb = rgb_from_string(color_string)
+def color_from_string(string):
+  rgb = rgb_from_string(string)
   return Color(rgb)
 
 def args_to_colors(args):
