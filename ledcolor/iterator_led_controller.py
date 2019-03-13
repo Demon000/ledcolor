@@ -5,6 +5,7 @@ class IteratorLedController(LedController):
   def __init__(self, leds, config):
     super().__init__(leds, config)
 
+    self.__stopped = False
     self.__iterator = config.iterator
     self.__update_time = config.update_time
 
