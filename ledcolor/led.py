@@ -4,7 +4,7 @@ from color import AnimatedColor
 
 class Led():
   def __init__(self, name):
-    self._name = config.name
+    self._name = name
 
   def set_color(self, color):
     pass
