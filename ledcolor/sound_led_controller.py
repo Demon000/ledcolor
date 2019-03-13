@@ -2,7 +2,7 @@ import pyaudio
 import numpy
 
 from color import Color
-from constants import audio_channels, audio_rate
+from constants import *
 
 class SoundLedController():
   def __init__(self, leds, config):
