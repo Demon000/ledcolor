@@ -35,7 +35,6 @@ def main():
 
   parser = OptionParser(usage=usage)
   parser.add_option('-u', '--update-time', dest='update_time', default=0.05, type=float)
-  parser.add_option('-m', '--morse', action="store_true", dest='is_morse')
   parser.add_option('-s', '--sound', action="store_true", dest='is_sound')
   parser.add_option('-L', '--low', dest='low_color_string', default='#00ff00', type=str)
   parser.add_option('-H', '--high', dest='high_color_string', default='#ff0000', type=str)
