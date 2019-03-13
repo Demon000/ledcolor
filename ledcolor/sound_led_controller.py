@@ -26,8 +26,6 @@ class SoundLedController(LedController):
     else:
       volume = 0
 
-    print(volume, max_volume, sample_max_volume)
-
     self.__max_volumes.append(max_volume)
     if len(self.__max_volumes) == volume_samples:
       self.__max_volumes.pop(0)
