@@ -14,6 +14,10 @@ class Color():
       self._rgb = rgb
 
   @property
+  def rgb_brightness(self):
+    return (self._rgb[0] << 16) | (self._rgb[1] << 8) | (self._rgb[2])
+
+  @property
   def rgb(self):
       return self._rgb
 

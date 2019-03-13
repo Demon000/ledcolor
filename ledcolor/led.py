@@ -3,11 +3,14 @@ import time
 from color import AnimatedColor
 
 class Led():
+
   def __init__(self, name):
-    self._name = name
+    path = '/sys/class/leds/{}/'.format(name)
+    self._brightness_path = path + 'brightness'
 
   def set_color(self, color):
-    pass
+    with open(self._brightness_path, 'w') as file:
+      file.write(str(color.rgb_brightness))
 
   def do_on_color(self, color):
     if color.on_duration == 0:

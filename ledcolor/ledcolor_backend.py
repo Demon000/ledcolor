@@ -17,28 +17,41 @@ class Server():
     self.__controllers = []
 
   def __remove_led_control(self, led):
+    found = False
     for controller in self.__controllers:
+      if controller.controls_led(led):
+        found = True
+        break
+
+    if found:
       controller.remove_led(led)
+      if not controller.has_leds():
+        controller.stop()
+        self.__controllers.remove(controller)
 
-  # def __find_matching_controller(self, config):
-  #   for controller in self.__controllers:
-  #     pass
-
-  def __apply_config(self, config):
-    if config.name not in self.__leds:
-      led = Led(config.name)
-      self.__leds[config.name] = led
-    else:
-      led = self.__leds[config.name]
-      self.__remove_led_control(led)
-
+  def __create_led_control(self, led, config):
+    leds = [led]
     if config.is_sound:
-      controller = SoundLedController([led], config)
+      controller = SoundLedController(leds, config)
     elif config.is_iterator:
-      controller = IteratorLedController([led], config)
+      controller = IteratorLedController(leds, config)
 
     self.__controllers.append(controller)
     controller.start()
+
+  def __create_led(self, name):
+    if name not in self.__leds:
+      led = Led(name)
+      self.__leds[name] = led
+    else:
+      led = self.__leds[name]
+
+    return led
+
+  def __apply_config(self, config):
+    led = self.__create_led(config.name)
+    self.__remove_led_control(led)
+    self.__create_led_control(led, config)
 
   def __receive_config(self, connection):
     config_data = b''

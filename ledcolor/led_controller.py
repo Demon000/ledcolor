@@ -20,5 +20,5 @@ class LedController():
     except:
       pass
 
-  # def uses_config(self, config):
-  #   return self.__config == config
+  def has_leds(self):
+    return len(self.__leds)
