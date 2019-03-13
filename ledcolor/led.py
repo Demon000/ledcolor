@@ -13,7 +13,7 @@ class Led():
     if color.on_duration == 0:
       return
 
-    self._set_color(color)
+    self.set_color(color)
     time.sleep(color.on_duration)
 
   def do_fade_color(self, color, into_color, update_time):
