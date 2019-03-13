@@ -1,7 +1,5 @@
 import time
 
-import rivalcfg
-
 from color import AnimatedColor
 
 class Led():

@@ -14,14 +14,14 @@ pip install -r requirements.txt
 
 Run the program using:
 ```
-./rival.py
+./ledcolor.py
 ```
 
 # Usage
 
 Details about usage are available using:
 ```
-./rival --help
+./ledcolor --help
 ```
 
 To get the sound syncing feature working, start the program using the `-s`
