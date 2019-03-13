@@ -1,3 +1,2 @@
-rivalcfg
 numpy
 pyaudio

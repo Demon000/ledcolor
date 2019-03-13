@@ -1,5 +1,3 @@
-from rivalcfg.helpers import is_color, color_string_to_rgb
-
 from color import Color, AnimatedColor
 
 def duration_from_string(duration_string):
@@ -10,11 +8,20 @@ def duration_from_string(duration_string):
 
   return duration
 
-def rgb_from_string(color_string):
-  if not is_color(color_string):
-    raise Exception('`{}` is not a valid color.'.format(color_string))
+def rgb_from_string(string):
+  # #f00 or #ff0000 -> f00 or ff0000
+  if string.startswith("#"):
+    string = string[1:]
 
-  return color_string_to_rgb(color_string)
+  # f00 -> ff0000
+  if len(string) == 3:
+    string = string[0] * 2 + string[1] * 2 + string[2] * 2
+
+  # ff0000 -> (255, 0, 0)
+  if len(string) == 6:
+    return tuple(int(string[i:i + 2], 16)  for i in range(0, 6, 2))
+
+  raise Exception('`{}` is not a valid color.'.format(string))
 
 def color_from_string(color_string):
   rgb = rgb_from_string(color_string)
