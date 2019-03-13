@@ -4,6 +4,7 @@ import os
 
 from sound_led_controller import SoundLedController
 from iterator_led_controller import IteratorLedController
+from led import Led
 from config import Config
 from constants import server_address
 
