@@ -1,5 +1,5 @@
 This project allows animating leds based on your choice of colors and timing,
-on the morse representation of words and on the volume of the sound currently playing.
+or the volume of the sound currently playing.
 
 # Dependencies
 

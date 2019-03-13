@@ -1,7 +1,7 @@
 from itertools import cycle
 import pickle
 
-from helpers import text_to_morse, morse_to_colors, args_to_colors, color_from_string
+from helpers import args_to_colors, color_from_string
 
 class Config():
   def __init__(self, options, args):
