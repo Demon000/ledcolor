@@ -2,8 +2,8 @@ import socket
 import sys
 import os
 
-from iterator_color import IteratorColor
-from sound_color import SoundColor
+from sound_led_controller import SoundLedController
+from iterator_led_controller import IteratorLedController
 from config import Config
 from constants import server_address
 
@@ -12,18 +12,32 @@ class Server():
     self.__server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     self.__server.bind(address)
 
-    self.__color_setter = None
+    self.__leds = {}
+    self.__controllers = []
+
+  def __remove_led_control(self, led):
+    for controller in self.__controllers:
+      controller.remove_led(led)
+
+  # def __find_matching_controller(self, config):
+  #   for controller in self.__controllers:
+  #     pass
 
   def __apply_config(self, config):
-    if self.__color_setter:
-      self.__color_setter.stop()
+    if config.name not in self.__leds:
+      led = Led(config.name)
+      self.__leds[config.name] = led
+    else:
+      led = self.__leds[config.name]
+      self.__remove_led_control(led)
 
     if config.is_sound:
-      self.__color_setter = SoundColor(config)
+      controller = SoundLedController([led], config)
     elif config.is_iterator:
-      self.__color_setter = IteratorColor(config)
+      controller = IteratorLedController([led], config)
 
-    self.__color_setter.start()
+    self.__controllers.append(controller)
+    controller.start()
 
   def __receive_config(self, connection):
     config_data = b''

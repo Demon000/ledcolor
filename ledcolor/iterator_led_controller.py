@@ -1,8 +1,10 @@
+from led_controller import LedController
 from threading import Thread
 
-class IteratorLedController():
+class IteratorLedController(LedController):
   def __init__(self, leds, config):
-    self.__leds = leds
+    super().__init__(leds, config)
+
     self.__iterator = config.iterator
     self.__update_time = config.update_time
 
@@ -12,7 +14,7 @@ class IteratorLedController():
     color = next(self.__iterator)
     while not self.__stopped:
       next_color = next(self.__iterator)
-      self.__leds.for_each_led('do_animated_color', color, next_color, self.__update_time)
+      self.for_each_led('do_animated_color', color, next_color, self.__update_time)
       color = next_color
 
   def start(self):

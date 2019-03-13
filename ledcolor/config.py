@@ -6,6 +6,7 @@ from helpers import args_to_colors, color_from_string
 class Config():
   def __init__(self, options, args):
     self.update_time = options.update_time
+    self.name = options.name
 
     self.is_sound = False
     self.is_iterator = False
@@ -16,7 +17,7 @@ class Config():
 
       self.low_color = color_from_string(options.low_color_string)
       self.high_color = color_from_string(options.high_color_string)
-    else:
+    elif options.is_colors:
       self.is_iterator = True
 
       colors = args_to_colors(args)
