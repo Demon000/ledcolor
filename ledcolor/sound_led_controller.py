@@ -13,23 +13,18 @@ class SoundLedController(LedController):
     self.__low_color = config.low_color
     self.__high_color = config.high_color
     self.__input_name = config.input_name
-    self.__max_volumes = []
-    self.__max_volume_samples = sample_volume_time / config.update_time
+    self.__sample_max_volume = 0
+    self.__max_volume_fall = config.update_time / max_volume_fall_time
 
   def __normalize_volume(self, max_volume):
-    if len(self.__max_volumes):
-      sample_max_volume = numpy.max(self.__max_volumes)
+    if self.__sample_max_volume > max_volume:
+      volume = max_volume / self.__sample_max_volume
+      self.__sample_max_volume -= self.__max_volume_fall
     else:
-      sample_max_volume = 0
-
-    if sample_max_volume > max_volume:
-      volume = max_volume / sample_max_volume
-    else:
+      self.__sample_max_volume = max_volume
       volume = max_volume
 
-    self.__max_volumes.append(max_volume)
-    if len(self.__max_volumes) == self.__max_volume_samples:
-      self.__max_volumes.pop(0)
+    print(max_volume, self.__sample_max_volume, volume)
 
     return volume
 
