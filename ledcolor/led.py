@@ -10,13 +10,32 @@ class Led():
     else:
       self._rgb = False
 
-    path = '/sys/class/leds/{}/'.format(name)
-    brightness_path = path + 'brightness'
-    self._brightness_file = open(brightness_path, 'w', buffering=1)
+    self.__path = '/sys/class/leds/{}/'.format(name)
+    self.__read_max_brightness()
+    self.__open_brightness()
 
-    max_brightness_path = path + 'max_brightness'
+  def __read_max_brightness(self):
+    max_brightness_path = self.__path + 'max_brightness'
     with open(max_brightness_path, 'r') as file:
-      self._max_brightness = int(file.readline())
+      self.__max_brightness = int(file.readline())
+
+  def __open_brightness(self):
+    brightness_path = self.__path + 'brightness'
+
+    try:
+      self.__brightness_file = open(brightness_path, 'w', buffering=1)
+      self.__errored = False
+    except FileNotFoundError:
+      self.__errored = True
+
+  def __write_brightness(self, data):
+    if self.__errored:
+      self.__open_brightness()
+
+    try:
+      self.__brightness_file.write(data)
+    except OSError:
+      self.__errored = True
 
   def set_color(self, color):
     if self._rgb:
@@ -26,7 +45,7 @@ class Led():
 
     data = str(brightness) + '\n'
 
-    self._brightness_file.write(data)
+    self.__write_brightness(data)
 
   def do_on_color(self, color):
     if color.on_duration == 0:
