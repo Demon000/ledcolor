@@ -24,8 +24,6 @@ class SoundLedController(LedController):
       self.__sample_max_volume = max_volume
       volume = max_volume
 
-    print(max_volume, self.__sample_max_volume, volume)
-
     return volume
 
   def __set_volume(self, volume):
