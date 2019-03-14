@@ -23,7 +23,6 @@ class SoundLedController(LedController):
       sample_max_volume = 0
 
     if max_volume > sample_max_volume:
-      self.__max_volumes = []
       sample_max_volume = max_volume
 
     if sample_max_volume:
