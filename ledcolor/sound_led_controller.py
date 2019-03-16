@@ -19,8 +19,9 @@ class SoundLedController(LedController):
   def __normalize_volume(self, max_volume):
     if self.__sample_max_volume > max_volume:
       volume = max_volume / self.__sample_max_volume
-      if self.__sample_max_volume > max_volume_floor:
-        self.__sample_max_volume -= self.__max_volume_fall
+      self.__sample_max_volume -= self.__max_volume_fall
+      if self.__sample_max_volume < max_volume_floor:
+        self.__sample_max_volume = max_volume_floor
     else:
       self.__sample_max_volume = max_volume
       volume = max_volume
