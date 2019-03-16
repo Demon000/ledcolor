@@ -41,7 +41,7 @@ class Led():
     if self._rgb:
       brightness = color.rgb_brightness
     else:
-      brightness = color.alpha_brightness * self._max_brightness // 255
+      brightness = color.alpha_brightness * self.__max_brightness // 255
 
     data = str(brightness) + '\n'
 
