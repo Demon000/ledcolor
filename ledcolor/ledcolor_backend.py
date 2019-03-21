@@ -40,11 +40,11 @@ class Server():
     controller.start()
 
   def __create_led(self, name):
-    if name not in self.__leds:
-      led = Led(name)
-      self.__leds[name] = led
-    else:
-      led = self.__leds[name]
+    if name in self.__leds:
+      return self.__leds[name]
+
+    led = Led(name)
+    self.__leds[name] = led
 
     return led
 
@@ -63,7 +63,10 @@ class Server():
         break
 
     config = Config.deserialize(config_data)
-    self.__apply_config(config)
+    try:
+      self.__apply_config(config)
+    except ValueError as ve:
+      print(ve)
 
   def __wait_for_connection(self):
     while True:

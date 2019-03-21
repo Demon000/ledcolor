@@ -1,3 +1,4 @@
+import os
 import time
 
 from color import AnimatedColor
@@ -10,9 +11,15 @@ class Led():
     else:
       self._rgb = False
 
+    self.__name = name
     self.__path = '/sys/class/leds/{}/'.format(name)
+    self.__check_existance()
     self.__read_max_brightness()
     self.__open_brightness()
+
+  def __check_existance(self):
+    if not os.path.isdir(self.__path):
+      raise ValueError('Led `{}` does not exist.'.format(self.__name))
 
   def __read_max_brightness(self):
     max_brightness_path = self.__path + 'max_brightness'
