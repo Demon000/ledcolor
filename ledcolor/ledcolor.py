@@ -38,11 +38,11 @@ def main():
   parser.add_option('-n', '--name', dest='name', type=str)
 
   parser.add_option('-c', '--colors', action='store_true', dest='is_colors')
-  parser.add_option('-s', '--sound', action='store_true', dest='is_sound')
 
+  parser.add_option('-s', '--sound', action='store_true', dest='is_sound')
+  parser.add_option('-i', '--input', dest='input_name', type=str)
   parser.add_option('-L', '--low', dest='low_color_string', default=default_low_color, type=str)
   parser.add_option('-H', '--high', dest='high_color_string', default=default_high_color, type=str)
-  parser.add_option('-i', '--input', dest='input_name', type=str)
 
   options, args = parser.parse_args()
   config = Config(options, args)
