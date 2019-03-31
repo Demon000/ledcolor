@@ -51,7 +51,6 @@ class Led():
       brightness = color.alpha_brightness * self.__max_brightness // 255
 
     data = str(brightness) + '\n'
-
     self.__write_brightness(data)
 
   def do_on_color(self, color):
