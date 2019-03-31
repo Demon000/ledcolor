@@ -6,3 +6,4 @@ default_low_color = '#00ff00'
 default_high_color = '#ff0000'
 max_volume_fall_time = 2
 max_volume_floor = 0.1
+random_color_volume = 0.8

@@ -1,3 +1,5 @@
+from random import randint
+
 from tuple_helpers import t_add_w
 
 class Color():
@@ -24,6 +26,13 @@ class Color():
   @property
   def rgb(self):
       return self._rgb
+
+  @staticmethod
+  def random():
+    r = randint(0, 255)
+    g = randint(0, 255)
+    b = randint(0, 255)
+    return Color((r, g, b))
 
 class AnimatedColor(Color):
   def __init__(self, on_duration, fade_duration, *args):
