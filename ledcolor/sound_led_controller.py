@@ -21,6 +21,7 @@ class SoundLedController(LedController):
     if self.__sample_max_volume > max_volume:
       volume = max_volume / self.__sample_max_volume
       self.__sample_max_volume -= self.__max_volume_fall
+
       if self.__sample_max_volume < max_volume_floor:
         self.__sample_max_volume = max_volume_floor
     else:
@@ -30,13 +31,15 @@ class SoundLedController(LedController):
     return volume
 
   def __set_volume(self, volume):
+    normalized_volume = self.__normalize_volume(volume)
+
     if self.__random_color:
-      if volume < random_color_volume:
+      if normalized_volume > volume:
         return
 
       color = Color.random()
     else:
-      color = Color(self.__low_color, self.__high_color, volume)
+      color = Color(self.__low_color, self.__high_color, normalized_volume)
 
     self.for_each_led('set_color', color)
 
@@ -45,8 +48,7 @@ class SoundLedController(LedController):
     data = numpy.abs(data)
 
     max_volume = numpy.max(data) / 2**15
-    volume = self.__normalize_volume(max_volume)
-    self.__set_volume(volume)
+    self.__set_volume(max_volume)
 
     return (raw, pyaudio.paContinue)
 
