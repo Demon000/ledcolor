@@ -10,10 +10,13 @@ class SoundLedController(LedController):
     super().__init__(leds, config)
 
     self.__chunk_size = int(audio_rate * config.update_time)
+    self.__input_name = config.input_name
+
     self.__random_color = config.random_color
+
     self.__low_color = config.low_color
     self.__high_color = config.high_color
-    self.__input_name = config.input_name
+
     self.__sample_max_volume = max_volume_floor
     self.__max_volume_fall = config.update_time / max_volume_fall_time
 
