@@ -1,4 +1,5 @@
-from random import randint
+import random
+import colorsys
 
 from tuple_helpers import t_add_w
 
@@ -29,9 +30,8 @@ class Color():
 
   @staticmethod
   def random():
-    r = randint(0, 255)
-    g = randint(0, 255)
-    b = randint(0, 255)
+    h, s, v = random.random(), 1, 0.5
+    r, g, b = [int(256 * i) for i in colorsys.hsv_to_rgb(h, s,v )]
     return Color((r, g, b))
 
 class AnimatedColor(Color):
