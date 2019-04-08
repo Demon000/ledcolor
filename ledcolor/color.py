@@ -4,6 +4,8 @@ import colorsys
 from tuple_helpers import t_add_w
 
 class Color():
+  last_random_hue = 0
+
   def __init__(self, rgb, into_rgb=None, weight=None):
     if isinstance(rgb, Color):
       rgb = rgb.rgb
@@ -30,8 +32,13 @@ class Color():
 
   @staticmethod
   def random():
-    h, s, v = random.random(), 1, 0.6
-    r, g, b = [int(256 * i) for i in colorsys.hsv_to_rgb(h, s,v )]
+    while True:
+      hue = random.random()
+      if abs(hue - Color.last_random_hue) > 0.2:
+        last_random_hue = hue
+        break
+
+    r, g, b = [int(256 * i) for i in colorsys.hsv_to_rgb(hue, 1, 0.6)]
     return Color((r, g, b))
 
 class AnimatedColor(Color):
