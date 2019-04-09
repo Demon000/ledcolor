@@ -25,8 +25,9 @@ class SoundLedController(LedController):
     if self.__volume_limit > volume:
       self.__volume_limit_falling = True
 
-      if self.__volume_limit - self.__volume_limit_fall > volume_limit_floor:
-        self.__volume_limit -= self.__volume_limit_fall
+      self.__volume_limit -= self.__volume_limit_fall
+      if self.__volume_limit < volume_limit_floor:
+        self.__volume_limit = volume_limit_floor
     else:
       self.__volume_limit_falling = False
       self.__volume_limit = volume
