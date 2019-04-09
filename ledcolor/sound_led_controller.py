@@ -39,7 +39,7 @@ class SoundLedController(LedController):
       if self.__sample_max_volume > normalized_volume:
         return
 
-      color = Color.random(self.__sample_max_volume)
+      color = Color.random()
     else:
       color = Color(self.__low_color, self.__high_color, normalized_volume)
 
