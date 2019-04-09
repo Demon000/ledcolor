@@ -35,9 +35,9 @@ class Color():
     while True:
       hue = random.random()
       if abs(hue - Color.last_random_hue) > 0.2:
-        last_random_hue = hue
         break
 
+    last_random_hue = hue
     r, g, b = [int(256 * i) for i in colorsys.hsv_to_rgb(hue, 1, 0.5)]
     return Color((r, g, b))
 
