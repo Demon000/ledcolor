@@ -24,15 +24,14 @@ class SoundLedController(LedController):
   def __normalize_volume(self, volume):
     if self.__volume_limit > volume:
       self.__volume_limit_falling = True
-      normalized_volume = volume / self.__volume_limit
 
       if self.__volume_limit - self.__volume_limit_fall > volume_limit_floor:
         self.__volume_limit -= self.__volume_limit_fall
     else:
       self.__volume_limit_falling = False
       self.__volume_limit = volume
-      normalized_volume = volume
 
+    normalized_volume = volume / self.__volume_limit
     return normalized_volume
 
   def __set_volume(self, volume):
