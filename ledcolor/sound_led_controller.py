@@ -15,22 +15,24 @@ class SoundLedController(LedController):
     self.__low_color = config.low_color
     self.__high_color = config.high_color
 
-    self.__volume_limit = volume_limit_floor
-    self.__volume_limit_falling = False
-    self.__volume_limit_fall = config.update_time / volume_limit_fall_time
+    self.__volume_limit = volume_low_limit
+    self.__volume_limit_falling = True
+    self.__volume_limit_fall = config.update_time / volume_limit_fall_time \
+        * volume_max_limit
 
   def __normalize_volume(self, volume):
     if self.__volume_limit > volume:
       self.__volume_limit_falling = True
 
       self.__volume_limit -= self.__volume_limit_fall
-      if self.__volume_limit < volume_limit_floor:
-        self.__volume_limit = volume_limit_floor
+      if self.__volume_limit < volume_low_limit:
+        self.__volume_limit = volume_low_limit
     else:
       self.__volume_limit_falling = False
       self.__volume_limit = volume
 
     normalized_volume = volume / self.__volume_limit
+
     return normalized_volume
 
   def __set_volume(self, volume):
@@ -44,7 +46,7 @@ class SoundLedController(LedController):
     data = numpy.frombuffer(raw, dtype=numpy.int16)
     data = numpy.abs(data)
 
-    max_volume = numpy.max(data) / 2**15
+    max_volume = numpy.max(data)
     self.__set_volume(max_volume)
 
     return (raw, pyaudio.paContinue)
