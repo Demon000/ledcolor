@@ -44,7 +44,7 @@ class SoundLedController(LedController):
     data = numpy.frombuffer(raw, dtype=numpy.int16)
     data = numpy.abs(data)
 
-    max_volume = numpy.max(data) / 2**15
+    max_volume = numpy.max(data) / (2**15 - 1)
     self.__set_volume(max_volume)
 
     return (raw, pyaudio.paContinue)
