@@ -12,8 +12,6 @@ class SoundLedController(LedController):
     self.__chunk_size = int(audio_rate * config.update_time)
     self.__input_name = config.input_name
 
-    self.__random_color = config.random_color
-
     self.__low_color = config.low_color
     self.__high_color = config.high_color
 
@@ -38,13 +36,7 @@ class SoundLedController(LedController):
   def __set_volume(self, volume):
     normalized_volume = self.__normalize_volume(volume)
 
-    if self.__random_color:
-      if self.__volume_limit_falling:
-        return
-
-      color = Color.random()
-    else:
-      color = Color(self.__low_color, self.__high_color, normalized_volume)
+    color = Color(self.__low_color, self.__high_color, normalized_volume)
 
     self.for_each_led('set_color', color)
 
