@@ -3,6 +3,7 @@
 import socket
 
 from optparse import OptionParser
+from textwrap import dedent
 
 from config import Config
 from constants import *
@@ -25,29 +26,45 @@ class Client:
 
 
 def main():
-    usage = """%prog [options] [colors]
+    parser = OptionParser(usage=dedent("""
+    %prog [options] [colors]
 
-  Colors: a list of colors to cycle through, defined in the following format
+    When using colors controller, colors is a list of colors to cycle through, defined in the following format
     color_string:on_duration:fade_duration
-
+    
     Where color_string is in one of the following formats:
     #ffffff ffffff #fff fff
-
+    
     Where on_duration and fade_duration are floating point values representing
     the number of seconds the color stays on and fades out, respectively.
-  """
+    """))
 
-    parser = OptionParser(usage=usage)
-    parser.add_option('-u', '--update-time', dest='update_time', default=default_update_time, type=float)
-    parser.add_option('-n', '--name', dest='name', type=str)
+    parser.add_option('-u', '--update-time', dest='update_time', default=default_update_time, type=float,
+                      help=dedent("""
+    number of seconds to pass (floating point value) until color is updated
+    """))
+    parser.add_option('-n', '--name', dest='name', type=str, help=dedent("""
+    name of the LED device, can be found by doing `ls /sys/class/dev`
+    """))
 
-    parser.add_option('-c', '--colors', action='store_true', dest='is_colors')
+    parser.add_option('-c', '--colors', action='store_true', dest='is_colors', help=dedent("""
+    use color controller
+    """), )
 
-    parser.add_option('-s', '--sound', action='store_true', dest='is_sound')
-    parser.add_option('-i', '--input', dest='input_name', type=str)
-    parser.add_option('-R', '--random', action='store_true', dest='random_color')
-    parser.add_option('-L', '--low', dest='low_color_string', default=default_low_color, type=str)
-    parser.add_option('-H', '--high', dest='high_color_string', default=default_high_color, type=str)
+    parser.add_option('-s', '--sound', action='store_true', dest='is_sound', help=dedent("""
+    use sound controller
+    """))
+    parser.add_option('-i', '--input', dest='input_name', type=str, help=dedent("""
+    name of the input device to use when in sound mode, can be found by doing `pacmd list-sources`
+    """))
+    parser.add_option('-L', '--low', dest='low_color_string', default=default_low_color, type=str, help=dedent("""
+    low volume color string specified in one of the following formats:
+    #ffffff ffffff #fff fff
+    """))
+    parser.add_option('-H', '--high', dest='high_color_string', default=default_high_color, type=str, help=dedent("""
+    high volume color string specified in one of the following formats:
+    #ffffff ffffff #fff fff
+    """))
 
     options, args = parser.parse_args()
     config = Config(options, args)

@@ -16,7 +16,6 @@ class Config:
             self.is_sound = True
             self.input_name = options.input_name
 
-            self.random_color = options.random_color
             self.low_color = color_from_string(options.low_color_string)
             self.high_color = color_from_string(options.high_color_string)
         elif options.is_colors:
