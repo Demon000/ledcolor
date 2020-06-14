@@ -14,6 +14,12 @@ class Color:
         else:
             self._rgb = rgb
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self._rgb == other._rgb
+        else:
+            return False
+
     @property
     def rgb_brightness(self):
         return (self._rgb[0] << 16) | (self._rgb[1] << 8) | (self._rgb[2])

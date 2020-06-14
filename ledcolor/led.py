@@ -12,6 +12,7 @@ class Led:
         else:
             self._rgb = False
 
+        self.__last_color = None
         self.__name = name
         self.__path = '/sys/class/leds/{}/'.format(name)
         self.__check_existence()
@@ -46,6 +47,10 @@ class Led:
             self.__errored = True
 
     def set_color(self, color):
+        if self.__last_color is not None and self.__last_color == color:
+            return
+
+        self.__last_color = color
         if self._rgb:
             brightness = color.rgb_brightness
         else:
