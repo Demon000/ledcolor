@@ -16,9 +16,6 @@ class SoundLedController(ThreadLedController):
         self.__low_color = config.low_color
         self.__high_color = config.high_color
 
-        self.__max_volumes = []
-        self.__max_volumes_samples = volume_sample_time / config.update_time
-
         self.__volume_limit = volume_low_limit
         self.__volume_limit_falling = True
         self.__volume_limit_fall = config.update_time / volume_limit_fall_time * (volume_max_limit - volume_low_limit)
@@ -43,10 +40,6 @@ class SoundLedController(ThreadLedController):
 
         for led in self._leds:
             led.set_color(color)
-
-        self.__max_volumes.append(volume)
-        if len(self.__max_volumes) > self.__max_volumes_samples:
-            self.__max_volumes.pop(0)
 
     def __get_mic(self):
         if self.__input_name is None:
