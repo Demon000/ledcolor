@@ -46,7 +46,8 @@ class SoundLedController(LedController):
 
         color = Color(self.__low_color, self.__high_color, transition)
 
-        self.for_each_led('set_color', color)
+        for led in self._leds:
+            led.set_color(color)
 
         self.__max_volumes.append(volume)
         if len(self.__max_volumes) > self.__max_volumes_samples:
