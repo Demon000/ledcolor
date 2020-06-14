@@ -7,8 +7,8 @@ from thread_led_controller import ThreadLedController
 
 
 class SoundLedController(ThreadLedController):
-    def __init__(self, leds, config):
-        super().__init__(self.__work, leds, config)
+    def __init__(self, config):
+        super().__init__(self.__work, config)
 
         self.__chunk_size = int(audio_rate * config.update_time)
         self.__input_name = config.input_name

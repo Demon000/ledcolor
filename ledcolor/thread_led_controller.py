@@ -4,8 +4,8 @@ from led_controller import LedController
 
 
 class ThreadLedController(LedController):
-    def __init__(self, work, leds, config):
-        super().__init__(leds, config)
+    def __init__(self, work, config):
+        super().__init__(config)
 
         self.__work = work
         self.__thread = None

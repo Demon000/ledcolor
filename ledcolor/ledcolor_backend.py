@@ -18,30 +18,40 @@ class Server:
         self.__leds = {}
         self.__controllers = []
 
-    def __remove_led_control(self, led):
-        found_controller = None
+    def __find_compatible_controller(self, config):
+        for controller in self.__controllers:
+            if controller.is_compatible_config(config):
+                return controller
+
+        return None
+
+    def __find_led_controller(self, led):
         for controller in self.__controllers:
             if controller.controls_led(led):
-                found_controller = controller
-                break
+                return controller
 
-        if found_controller:
-            found_controller.remove_led(led)
-            if not found_controller.has_leds():
-                found_controller.stop()
-                self.__controllers.remove(found_controller)
+        return None
 
-    def __create_led_control(self, led, config):
-        leds = [led]
-        if config.is_sound:
-            controller = SoundLedController(leds, config)
-        elif config.is_iterator:
-            controller = IteratorLedController(leds, config)
-        else:
-            raise ValueError("Unsupported controller type")
+    def __remove_led_control(self, led):
+        controller = self.__find_led_controller(led)
+        if not controller:
+            return
 
-        self.__controllers.append(controller)
-        controller.start()
+        controller.remove_led(led)
+
+    def __add_led_control(self, led, config):
+        controller = self.__find_compatible_controller(config)
+        if not controller:
+            if config.is_sound:
+                controller = SoundLedController(config)
+            elif config.is_iterator:
+                controller = IteratorLedController(config)
+            else:
+                raise ValueError("Unsupported controller type")
+
+            self.__controllers.append(controller)
+
+        controller.add_led(led)
 
     def __create_led(self, name):
         if name in self.__leds:
@@ -55,7 +65,7 @@ class Server:
     def __apply_config(self, config):
         led = self.__create_led(config.name)
         self.__remove_led_control(led)
-        self.__create_led_control(led, config)
+        self.__add_led_control(led, config)
 
     def __receive_config(self, connection):
         config_data = b''

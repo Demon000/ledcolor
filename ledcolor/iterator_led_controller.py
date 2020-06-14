@@ -2,8 +2,8 @@ from thread_led_controller import ThreadLedController
 
 
 class IteratorLedController(ThreadLedController):
-    def __init__(self, leds, config):
-        super().__init__(self.__work, leds, config)
+    def __init__(self, config):
+        super().__init__(self.__work, config)
 
         self.__iterator = config.iterator
         self.__update_time = config.update_time

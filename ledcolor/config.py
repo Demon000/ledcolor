@@ -25,10 +25,31 @@ class Config:
             self.iterator = cycle(colors)
 
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
-        else:
+        if not isinstance(other, self.__class__):
             return False
+
+        if self.update_time != other.update_time:
+            return False
+
+        if self.is_sound != other.is_sound:
+            return False
+        elif self.is_sound:
+            if self.input_name != other.input_name:
+                return False
+
+            if self.low_color != other.low_color:
+                return False
+
+            if self.high_color != other.high_color:
+                return False
+
+        if self.is_iterator != other.is_iterator:
+            return False
+        elif self.is_iterator:
+            if self.iterator != other.iterator:
+                return False
+
+        return True
 
     def serialize(self):
         return pickle.dumps(self)
