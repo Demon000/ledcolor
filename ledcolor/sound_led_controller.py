@@ -1,14 +1,14 @@
-import pyaudio
 import numpy
+import soundcard as sc
 
-from led_controller import LedController
 from color import Color
 from constants import *
+from thread_led_controller import ThreadLedController
 
 
-class SoundLedController(LedController):
+class SoundLedController(ThreadLedController):
     def __init__(self, leds, config):
-        super().__init__(leds, config)
+        super().__init__(self.__work, leds, config)
 
         self.__chunk_size = int(audio_rate * config.update_time)
         self.__input_name = config.input_name
@@ -22,9 +22,6 @@ class SoundLedController(LedController):
         self.__volume_limit = volume_low_limit
         self.__volume_limit_falling = True
         self.__volume_limit_fall = config.update_time / volume_limit_fall_time * (volume_max_limit - volume_low_limit)
-
-        self.__audio = None
-        self.__stream = None
 
     def __normalize_volume(self, volume):
         if self.__volume_limit > volume:
@@ -42,9 +39,7 @@ class SoundLedController(LedController):
         return normalized_volume
 
     def __set_volume(self, volume):
-        transition = volume / volume_max_limit
-
-        color = Color(self.__low_color, self.__high_color, transition)
+        color = Color(self.__low_color, self.__high_color, volume)
 
         for led in self._leds:
             led.set_color(color)
@@ -53,38 +48,19 @@ class SoundLedController(LedController):
         if len(self.__max_volumes) > self.__max_volumes_samples:
             self.__max_volumes.pop(0)
 
-    def __on_stream_data(self, raw, frame_count, time_info, status):
-        data = numpy.frombuffer(raw, dtype=numpy.int16)
-        max_volume = numpy.max(data)
+    def __get_mic(self):
+        if self.__input_name is None:
+            return sc.default_microphone()
+        else:
+            return sc.get_microphone(self.__input_name, True)
 
-        self.__set_volume(max_volume)
+    def __work(self):
+        mic = self.__get_mic()
+        if mic is None:
+            raise ValueError("Failed to find default microphone")
 
-        return raw, pyaudio.paContinue
-
-    def __find_input_index(self):
-        info = self.__audio.get_default_host_api_info()
-
-        devices_count = info.get('deviceCount')
-        for device_index in range(devices_count):
-            device = self.__audio.get_device_info_by_host_api_device_index(0, device_index)
-            if device['name'] == self.__input_name:
-                return device['index']
-
-        return None
-
-    def start(self):
-        self.__audio = pyaudio.PyAudio()
-        input_index = self.__find_input_index()
-        self.__stream = self.__audio.open(format=pyaudio.paInt16,
-                                          input=True, input_device_index=input_index,
-                                          channels=audio_channels, rate=audio_rate,
-                                          frames_per_buffer=self.__chunk_size,
-                                          stream_callback=self.__on_stream_data)
-
-    def stop(self):
-        if self.__audio:
-            self.__audio.terminate()
-
-        if self.__stream:
-            self.__stream.stop_stream()
-            self.__stream.close()
+        with mic.recorder(audio_rate, channels=audio_channels) as mic_recorder:
+            while not self._should_stop_thread:
+                data = mic_recorder.record(numframes=self.__chunk_size)
+                max_volume = numpy.max(data)
+                self.__set_volume(max_volume)

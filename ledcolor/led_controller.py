@@ -3,6 +3,9 @@ class LedController:
         self._leds = leds
         self.__config = config
 
+    def is_compatible_config(self, config):
+        return self.__config == config
+
     def controls_led(self, led):
         return led in self._leds
 

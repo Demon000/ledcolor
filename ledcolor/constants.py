@@ -1,6 +1,6 @@
 server_address = '/tmp/ledcolor_socket'
 
-audio_channels = 1
+audio_channels = [0]
 audio_rate = 48000
 default_update_time = 0.05
 

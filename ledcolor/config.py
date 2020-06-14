@@ -24,6 +24,12 @@ class Config:
             colors = args_to_colors(args)
             self.iterator = cycle(colors)
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
+
     def serialize(self):
         return pickle.dumps(self)
 

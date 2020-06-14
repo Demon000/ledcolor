@@ -10,7 +10,12 @@ pip install -r requirements.txt
 
 # Running
 
-Run the program using:
+Start the backend using:
+```
+./ledcolor_backend.py
+```
+
+Configure the backend using:
 ```
 ./ledcolor.py
 ```
@@ -22,10 +27,16 @@ Details about usage are available using:
 ./ledcolor --help
 ```
 
-To get the sound syncing feature working, start the program using the `-s`
-option, then open `pavucontrol`, press on the `Recording` tab, and switch
-captured device to your output's monitor.
+To get the sound syncing feature working, the backend must have access to the pulseaudio
+socket. The easiest way to provide this ability is to run the backend using the same
+user as the pulseuadio server.
 
-Alternatively, you can install `pulseaudio-alsa` and then follow the steps
-(here)[https://wiki.archlinux.org/index.php/PulseAudio/Examples#ALSA_monitor_source],
-and then specify the `-i` option with the value of your defined source, eg. `pulse_monitor`.
+On some setups (for example, when using, KDE) the pulseaudio server is started as the current user, so you
+must start the backend _without_ using `sudo`.
+You will have to chown the brightness files of the LEDs you want to let the backend control.
+```
+sudo chown <username> /sys/class/leds/<name>/brightness
+```
+
+On other setups, the pulseuadio server is started in system mode, in which case you need
+to start the backend using `sudo` and configure it using `sudo` too, because of the socket ownership.
