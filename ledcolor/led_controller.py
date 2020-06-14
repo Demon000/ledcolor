@@ -12,8 +12,14 @@ class LedController:
     def remove_led(self, led):
         try:
             self._leds.remove(led)
-        except:
+        except ValueError:
             pass
 
     def has_leds(self):
         return len(self._leds)
+
+    def start(self):
+        raise NotImplementedError()
+
+    def stop(self):
+        raise NotImplementedError()
