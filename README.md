@@ -3,8 +3,6 @@ or the volume of the sound currently playing.
 
 # Dependencies
 
-Install `portaudio` manually or from your distro's package repository.
-
 Install the dependencies using:
 ```
 pip install -r requirements.txt
