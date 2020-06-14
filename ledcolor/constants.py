@@ -10,3 +10,4 @@ default_high_color = '#ff0000'
 volume_limit_fall_time = 2
 volume_low_limit = 0.001
 volume_max_limit = 1.0
+volume_sample_time = 2

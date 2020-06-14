@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import soundcard as sc
 
 from color import Color
@@ -16,22 +16,30 @@ class SoundLedController(ThreadLedController):
         self.__low_color = config.low_color
         self.__high_color = config.high_color
 
+        self.__recent_volume_samples = [0]
+        self.__no_recent_volume_samples = int(volume_sample_time / config.update_time)
+
         self.__volume_limit = volume_low_limit
         self.__volume_limit_falling = True
         self.__volume_limit_fall = config.update_time / volume_limit_fall_time * (volume_max_limit - volume_low_limit)
 
+    def __add_recent_volume(self, volume):
+        self.__recent_volume_samples.append(volume)
+        if len(self.__recent_volume_samples) > self.__no_recent_volume_samples:
+            self.__recent_volume_samples.pop(0)
+
     def __normalize_volume(self, volume):
-        if self.__volume_limit > volume:
-            self.__volume_limit_falling = True
+        min_volume = np.min(self.__recent_volume_samples)
+        max_volume = np.max(self.__recent_volume_samples)
 
-            self.__volume_limit -= self.__volume_limit_fall
-            if self.__volume_limit < volume_low_limit:
-                self.__volume_limit = volume_low_limit
+        if max_volume - min_volume == 0:
+            normalized_volume = 0
         else:
-            self.__volume_limit_falling = False
-            self.__volume_limit = volume
+            normalized_volume = (volume - min_volume) / (max_volume - min_volume)
 
-        return volume_max_limit / self.__volume_limit * volume
+        self.__add_recent_volume(volume)
+
+        return normalized_volume
 
     def __set_volume(self, volume):
         color = Color(self.__low_color, self.__high_color, volume)
@@ -53,6 +61,6 @@ class SoundLedController(ThreadLedController):
         with mic.recorder(audio_rate, channels=audio_channels) as mic_recorder:
             while not self._should_stop_thread:
                 data = mic_recorder.record(numframes=self.__chunk_size)
-                volume = numpy.max(data)
+                volume = np.max(data)
                 volume = self.__normalize_volume(volume)
                 self.__set_volume(volume)
