@@ -31,9 +31,7 @@ class SoundLedController(ThreadLedController):
             self.__volume_limit_falling = False
             self.__volume_limit = volume
 
-        normalized_volume = volume_max_limit / self.__volume_limit * volume
-
-        return normalized_volume
+        return volume_max_limit / self.__volume_limit * volume
 
     def __set_volume(self, volume):
         color = Color(self.__low_color, self.__high_color, volume)
@@ -55,5 +53,6 @@ class SoundLedController(ThreadLedController):
         with mic.recorder(audio_rate, channels=audio_channels) as mic_recorder:
             while not self._should_stop_thread:
                 data = mic_recorder.record(numframes=self.__chunk_size)
-                max_volume = numpy.max(data)
-                self.__set_volume(max_volume)
+                volume = numpy.max(data)
+                volume = self.__normalize_volume(volume)
+                self.__set_volume(volume)
