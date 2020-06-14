@@ -1,6 +1,3 @@
-import random
-import colorsys
-
 from tuple_helpers import t_add_w
 
 
