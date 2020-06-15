@@ -5,13 +5,13 @@ class IteratorLedController(ThreadLedController):
     def __init__(self, config):
         super().__init__(self.__work, config)
 
-        self.__iterator = config.iterator
+        self.__colors = config.colors
         self.__update_time = config.update_time
 
     def __work(self):
-        color = next(self.__iterator)
+        color = next(self.__colors)
         while not self._should_stop_thread:
-            next_color = next(self.__iterator)
+            next_color = next(self.__colors)
             for led in self._leds:
                 led.do_animated_color(color, next_color, self.__update_time)
             color = next_color

@@ -1,53 +1,60 @@
+from enum import Enum
 from itertools import cycle
 import pickle
 
 from helpers import args_to_colors, color_from_string
 
 
+class ControllerType(str, Enum):
+    COLORS = 'colors'
+    SOUND = 'sound'
+    NONE = 'none'
+
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+
+
 class Config:
-    def __init__(self, options, args):
-        self.update_time = options.update_time
-        self.name = options.name
+    def __init__(self, args):
+        self.name = args.name
+        self.controller = args.controller
+        self.update_time = args.update_time
 
-        self.is_sound = False
-        self.is_iterator = False
+        self.input_name = None
+        self.low_color = None
+        self.high_color = None
+        self.colors = None
 
-        if options.is_sound:
-            self.is_sound = True
-            self.input_name = options.input_name
+        if args.controller == ControllerType.SOUND:
+            self.input_name = args.input_name
 
-            self.low_color = color_from_string(options.low_color_string)
-            self.high_color = color_from_string(options.high_color_string)
-        elif options.is_colors:
-            self.is_iterator = True
-
-            colors = args_to_colors(args)
-            self.iterator = cycle(colors)
+            self.low_color = color_from_string(args.low_color_string)
+            self.high_color = color_from_string(args.high_color_string)
+        elif args.controller == ControllerType.COLORS:
+            self.colors = cycle(args_to_colors(args.color))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
 
+        if self.controller != other.controller:
+            return False
+
         if self.update_time != other.update_time:
             return False
 
-        if self.is_sound != other.is_sound:
+        if self.input_name != other.input_name:
             return False
-        elif self.is_sound:
-            if self.input_name != other.input_name:
-                return False
 
-            if self.low_color != other.low_color:
-                return False
-
-            if self.high_color != other.high_color:
-                return False
-
-        if self.is_iterator != other.is_iterator:
+        if self.low_color != other.low_color:
             return False
-        elif self.is_iterator:
-            if self.iterator != other.iterator:
-                return False
+
+        if self.high_color != other.high_color:
+            return False
+
+        if self.colors != other.colors:
+            return False
 
         return True
 

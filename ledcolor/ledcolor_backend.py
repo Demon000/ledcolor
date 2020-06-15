@@ -6,7 +6,7 @@ import os
 from sound_led_controller import SoundLedController
 from iterator_led_controller import IteratorLedController
 from led import Led
-from config import Config
+from config import Config, ControllerType
 from constants import server_address
 
 
@@ -42,10 +42,12 @@ class Server:
     def __add_led_control(self, led, config):
         controller = self.__find_compatible_controller(config)
         if not controller:
-            if config.is_sound:
+            if config.controller == ControllerType.SOUND:
                 controller = SoundLedController(config)
-            elif config.is_iterator:
+            elif config.controller == ControllerType.COLORS:
                 controller = IteratorLedController(config)
+            elif config.controller == ControllerType.NONE:
+                return
             else:
                 raise ValueError("Unsupported controller type")
 
