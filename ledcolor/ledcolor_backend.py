@@ -42,30 +42,30 @@ class Server:
     def __add_led_control(self, led, config):
         controller = self.__find_compatible_controller(config)
         if not controller:
-            if config.controller == ControllerType.SOUND:
+            if config.controller_type == ControllerType.SOUND:
                 controller = SoundLedController(config)
-            elif config.controller == ControllerType.COLORS:
+            elif config.controller_type == ControllerType.COLORS:
                 controller = IteratorLedController(config)
-            elif config.controller == ControllerType.NONE:
+            elif config.controller_type == ControllerType.NONE:
                 return
             else:
-                raise ValueError("Unsupported controller type")
+                raise ValueError('Unsupported controller type')
 
             self.__controllers.append(controller)
 
         controller.add_led(led)
 
-    def __create_led(self, name):
-        if name in self.__leds:
-            return self.__leds[name]
+    def __create_led(self, led_name, led_type):
+        if led_name in self.__leds:
+            return self.__leds[led_name]
 
-        led = Led(name)
-        self.__leds[name] = led
+        led = Led(led_name, led_type)
+        self.__leds[led_name] = led
 
         return led
 
     def __apply_config(self, config):
-        led = self.__create_led(config.name)
+        led = self.__create_led(config.led_name, config.led_type)
         self.__remove_led_control(led)
         self.__add_led_control(led, config)
 

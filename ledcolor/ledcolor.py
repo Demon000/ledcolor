@@ -3,7 +3,7 @@
 import socket
 from argparse import ArgumentParser
 
-from config import Config, ControllerType
+from config import Config, ControllerType, LedType
 from constants import *
 
 
@@ -27,12 +27,18 @@ def main():
     parser = ArgumentParser()
 
     parser.add_argument('name', type=str, help="""
-    Name of the LED device, can be found by doing `ls /sys/class/dev`
+    Name of the LED device
     """)
 
+    parser.add_argument('type', choices=LedType.list(), help="""
+    Type of the LED device, available types:
+    {}
+    """.format(', '.join(LedType.list())))
+
     parser.add_argument('controller', choices=ControllerType.list(), help="""
-    Controller type to use
-    """)
+    Controller type to use, avilable types:
+    {}
+    """.format(', '.join(ControllerType.list())))
 
     parser.add_argument('color', type=str, nargs='*', help="""
     Multiple colors to cycle through when in colors mode, defined in the following format

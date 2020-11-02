@@ -2,19 +2,19 @@ import os
 import time
 
 from color import AnimatedColor
+from config import LedType
 
 
 class Led:
-    def __init__(self, name):
-        color = name.split(':')[1]
-        if color == 'rgb':
-            self._rgb = True
-        else:
-            self._rgb = False
-
+    def __init__(self, led_name, led_type):
         self.__last_color = None
-        self.__name = name
-        self.__path = '/sys/class/leds/{}/'.format(name)
+        self.__name = led_name
+        self.__type = led_type
+
+        if led_type == LedType.SYSFS_RGB or \
+                led_type == LedType.SYSFS_LINEAR:
+            self.__path = '/sys/class/leds/{}/'.format(led_name)
+
         self.__check_existence()
         self.__read_max_brightness()
         self.__open_brightness()
@@ -51,10 +51,12 @@ class Led:
             return
 
         self.__last_color = color
-        if self._rgb:
+        if self.__type == LedType.SYSFS_RGB:
             brightness = color.rgb_brightness
-        else:
+        elif self.__type == LedType.SYSFS_LINEAR:
             brightness = color.alpha_brightness * self.__max_brightness // 255
+        else:
+            raise Exception('`{}` is not a valid led type'.format(self.__type))
 
         data = str(brightness) + '\n'
         self.__write_brightness(data)
