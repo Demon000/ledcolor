@@ -1,34 +1,37 @@
+from typing import List
+
 import numpy as np
 import soundcard as sc
 
+from parameters.controller_parameters import ControllerParameters
 from utils.color import Color
 from config import *
 from controllers.thread_led_controller import ThreadLedController
 
 
 class SoundLedController(ThreadLedController):
-    def __init__(self, config):
+    def __init__(self, config: ControllerParameters):
         super().__init__(self.__work, config)
 
-        self.__chunk_size = int(AUDIO_RATE * config.update_time)
-        self.__input_name = config.input_name
+        self.__chunk_size: int = int(AUDIO_RATE * config.update_time)
+        self.__input_name: str = config.input_name
 
-        self.__low_color = config.low_color
-        self.__high_color = config.high_color
+        self.__low_color: Color = config.low_color
+        self.__high_color: Color = config.high_color
 
-        self.__recent_volume_samples = [0]
-        self.__no_recent_volume_samples = int(VOLUME_SAMPLE_TIME / config.update_time)
+        self.__recent_volume_samples: List[float] = [0.0]
+        self.__no_recent_volume_samples: int = int(VOLUME_SAMPLE_TIME / config.update_time)
 
-        self.__volume_limit = VOLUME_LOW_LIMIT
-        self.__volume_limit_falling = True
-        self.__volume_limit_fall = config.update_time / VOLUME_LIMIT_FALL_TIME * (VOLUME_MAX_LIMIT - VOLUME_LOW_LIMIT)
+        self.__volume_limit: float = VOLUME_LOW_LIMIT
+        self.__volume_limit_falling: bool = True
+        self.__volume_limit_fall: float = config.update_time / VOLUME_LIMIT_FALL_TIME * (VOLUME_MAX_LIMIT - VOLUME_LOW_LIMIT)
 
-    def __add_recent_volume(self, volume):
+    def __add_recent_volume(self, volume: float):
         self.__recent_volume_samples.append(volume)
         if len(self.__recent_volume_samples) > self.__no_recent_volume_samples:
             self.__recent_volume_samples.pop(0)
 
-    def __normalize_volume(self, volume):
+    def __normalize_volume(self, volume) -> float:
         min_volume = np.min(self.__recent_volume_samples)
         max_volume = np.max(self.__recent_volume_samples)
 

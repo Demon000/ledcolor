@@ -1,7 +1,7 @@
 import time
 from abc import ABC, abstractmethod
 
-from utils.color import AnimatedColor
+from utils.animated_color import AnimatedColor
 
 
 class Led(ABC):

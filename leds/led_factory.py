@@ -1,3 +1,4 @@
+from leds.led import Led
 from leds.sysfs_linear_led import SysfsLinearLed
 from leds.sysfs_rgb_led import SysfsRgbLed
 from parameters.led_parameters import LedParameters, LedType
@@ -5,7 +6,7 @@ from parameters.led_parameters import LedParameters, LedType
 
 class LedFactory:
     @staticmethod
-    def build(config: LedParameters):
+    def build(config: LedParameters) -> Led:
         if config.led_type == LedType.SYSFS_RGB:
             return SysfsRgbLed(config.led_name)
         elif config.led_type == LedType.SYSFS_LINEAR:

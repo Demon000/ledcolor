@@ -41,7 +41,7 @@ class SysfsLed(Led, metaclass=ABCMeta):
             self.__errored = True
 
     @abstractmethod
-    def _get_brightness(self, color):
+    def _get_brightness(self, color) -> int:
         pass
 
     def _set_color(self, color):

@@ -2,8 +2,11 @@
 
 import socket
 import os
+from typing import Union
 
 from controllers.controller_factory import ControllerFactory
+from controllers.led_controller import LedController
+from leds.led import Led
 from leds.led_factory import LedFactory
 from parameters.led_controller_parameters import LedControllerParameters
 from config import SERVER_ADDRESS
@@ -17,14 +20,14 @@ class Server:
         self.__leds = {}
         self.__controllers = []
 
-    def __find_compatible_controller(self, config):
+    def __find_compatible_controller(self, config) -> Union[LedController, None]:
         for controller in self.__controllers:
             if controller.is_compatible_config(config):
                 return controller
 
         return None
 
-    def __find_led_controller(self, led):
+    def __find_led_controller(self, led) -> Union[LedController, None]:
         for controller in self.__controllers:
             if controller.controls_led(led):
                 return controller
@@ -46,7 +49,7 @@ class Server:
 
         controller.add_led(led)
 
-    def __create_led(self, config):
+    def __create_led(self, config) -> Led:
         if config.led_name in self.__leds:
             return self.__leds[config.led_name]
 

@@ -9,9 +9,9 @@ class LedControllerParameters:
         self.led = LedParameters(args)
         self.controller = ControllerParameters(args)
 
-    def serialize(self):
+    def serialize(self) -> bytes:
         return pickle.dumps(self)
 
     @staticmethod
-    def deserialize(serialization):
+    def deserialize(serialization: bytes) -> 'LedControllerParameters':
         return pickle.loads(serialization)

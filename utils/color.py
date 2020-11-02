@@ -1,8 +1,12 @@
+from typing import Union, Tuple
+
 from utils.tuple_helpers import t_add_w
 
 
 class Color:
-    def __init__(self, rgb, into_rgb=None, weight=None):
+    def __init__(self, rgb: Union['Color', Tuple],
+                 into_rgb: Union['Color', Tuple, None] = None,
+                 weight: Union[int, None] = None):
         if isinstance(rgb, Color):
             rgb = rgb.rgb
 
@@ -14,36 +18,20 @@ class Color:
         else:
             self._rgb = rgb
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if not isinstance(other, self.__class__):
             return False
 
         return self._rgb == other._rgb
 
     @property
-    def rgb_brightness(self):
+    def rgb_brightness(self) -> int:
         return (self._rgb[0] << 16) | (self._rgb[1] << 8) | (self._rgb[2])
 
     @property
-    def alpha_brightness(self):
-        return self._rgb[2]
+    def alpha_brightness(self) -> int:
+        return (self._rgb[0] + self._rgb[1] + self._rgb[2]) / 3
 
     @property
-    def rgb(self):
+    def rgb(self) -> Tuple:
         return self._rgb
-
-
-class AnimatedColor(Color):
-    def __init__(self, on_duration, fade_duration, *args):
-        super().__init__(*args)
-
-        self.__on_duration = on_duration
-        self.__fade_duration = fade_duration
-
-    @property
-    def on_duration(self):
-        return self.__on_duration
-
-    @property
-    def fade_duration(self):
-        return self.__fade_duration

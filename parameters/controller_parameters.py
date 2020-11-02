@@ -1,5 +1,7 @@
 from itertools import cycle
+from typing import Union, List
 
+from utils.color import Color
 from utils.helpers import color_from_string, args_to_colors
 from utils.string_enum import StringEnum
 
@@ -12,17 +14,17 @@ class ControllerType(StringEnum):
 
 class ControllerParameters:
     def __init__(self, args):
-        self.controller_type = args.controller_type
+        self.controller_type: str = args.controller_type
 
         if self.controller_type not in ControllerType.list():
             raise Exception('`{}` is not a valid controller type'.format(self.controller_type))
 
-        self.update_time = args.update_time
+        self.update_time: float = args.update_time
 
-        self.input_name = None
-        self.low_color = None
-        self.high_color = None
-        self.colors = None
+        self.input_name: Union[str, None] = None
+        self.low_color: Union[Color, None] = None
+        self.high_color: Union[Color, None] = None
+        self.colors: Union[List[Color], None] = None
 
         if args.controller_type == ControllerType.SOUND:
             self.input_name = args.input_name
@@ -31,7 +33,7 @@ class ControllerParameters:
         elif args.controller_type == ControllerType.COLORS:
             self.colors = cycle(args_to_colors(args.color))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if not isinstance(other, self.__class__):
             return False
 

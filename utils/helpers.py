@@ -1,7 +1,10 @@
-from utils.color import Color, AnimatedColor
+from typing import Tuple, List
+
+from utils.color import Color
+from utils.animated_color import AnimatedColor
 
 
-def duration_from_string(duration_string):
+def duration_from_string(duration_string) -> float:
     try:
         duration = float(duration_string)
     except ValueError:
@@ -10,7 +13,7 @@ def duration_from_string(duration_string):
     return duration
 
 
-def rgb_from_string(string):
+def rgb_from_string(string) -> Tuple:
     # #f00 or #ff0000 -> f00 or ff0000
     if string.startswith("#"):
         string = string[1:]
@@ -26,12 +29,12 @@ def rgb_from_string(string):
     raise Exception('`{}` is not a valid color'.format(string))
 
 
-def color_from_string(string):
+def color_from_string(string) -> Color:
     rgb = rgb_from_string(string)
     return Color(rgb)
 
 
-def args_to_colors(args):
+def args_to_colors(args) -> List[Color]:
     colors = []
     for arg in args:
         color_string, on_duration_string, fade_duration_string = arg.split(':')

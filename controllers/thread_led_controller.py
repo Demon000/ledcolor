@@ -1,10 +1,11 @@
 from threading import Thread
 
 from controllers.led_controller import LedController
+from parameters.controller_parameters import ControllerParameters
 
 
 class ThreadLedController(LedController):
-    def __init__(self, work, config):
+    def __init__(self, work, config: ControllerParameters):
         super().__init__(config)
 
         self.__work = work
