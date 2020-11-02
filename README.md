@@ -1,17 +1,7 @@
 This project allows animating leds based on your choice of colors and timing,
 or the volume of the sound currently playing.
 
-# Setup
-
-Create a virtual environment:
-```
-python3 -m venv venv
-```
-
-Use the virtual environment:
-```
-. venv/bin/activate
-```
+# Dependencies
 
 Install the dependencies using:
 ```
@@ -19,11 +9,6 @@ pip install -r requirements.txt
 ```
 
 # Running
-
-Use the virtual environment:
-```
-. venv/bin/activate
-```
 
 Start the backend using:
 ```
