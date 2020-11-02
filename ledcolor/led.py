@@ -21,7 +21,7 @@ class Led:
 
     def __check_existence(self):
         if not os.path.isdir(self.__path):
-            raise ValueError('Led `{}` does not exist.'.format(self.__name))
+            raise ValueError('Led `{}` does not exist'.format(self.__name))
 
     def __read_max_brightness(self):
         max_brightness_path = self.__path + 'max_brightness'
