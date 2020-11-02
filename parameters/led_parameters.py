@@ -4,6 +4,7 @@ from utils.string_enum import StringEnum
 class LedType(StringEnum):
     SYSFS_RGB = 'sysfs_rgb'
     SYSFS_LINEAR = 'sysfs_linear'
+    RAZER_KEYBOARD = 'razer_keyboard'
 
 
 class LedParameters:

@@ -1,4 +1,5 @@
 from leds.led import Led
+from leds.razer_keyboard_led import RazerKeyboardLed
 from leds.sysfs_linear_led import SysfsLinearLed
 from leds.sysfs_rgb_led import SysfsRgbLed
 from parameters.led_parameters import LedParameters, LedType
@@ -11,5 +12,7 @@ class LedFactory:
             return SysfsRgbLed(config.led_name)
         elif config.led_type == LedType.SYSFS_LINEAR:
             return SysfsLinearLed(config.led_name)
+        elif config.led_type == LedType.RAZER_KEYBOARD:
+            return RazerKeyboardLed(config.led_name)
         else:
             raise Exception('`{}` is not a valid led type'.format(config.led_type))
