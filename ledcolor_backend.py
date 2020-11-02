@@ -66,7 +66,7 @@ class Server:
         return led
 
     def __apply_config(self, config):
-        led = self.__create_led(config.led_name, config.led_type)
+        led = self.__create_led(config.led.led_name, config.led.led_type)
         self.__remove_led_control(led)
         self.__add_led_control(led, config)
 
