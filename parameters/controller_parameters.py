@@ -33,7 +33,7 @@ class ControllerParameters:
         elif args.controller_type == ControllerType.COLORS:
             self.colors = args_to_colors(args.color)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: 'ControllerParameters') -> bool:
         if not isinstance(other, self.__class__):
             return False
 
