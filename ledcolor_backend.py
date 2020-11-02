@@ -11,6 +11,7 @@ from leds.led_factory import LedFactory
 from parameters.controller_parameters import ControllerParameters
 from parameters.led_controller_parameters import LedControllerParameters
 from config import SERVER_ADDRESS
+from parameters.led_parameters import LedParameters
 
 
 class Server:
@@ -28,32 +29,32 @@ class Server:
 
         return None
 
-    def __find_led_controller(self, led) -> Union[LedController, None]:
+    def __find_led_controller(self, led: Led) -> Union[LedController, None]:
         for controller in self.__controllers:
             if controller.controls_led(led):
                 return controller
 
         return None
 
-    def __remove_led_control(self, led):
+    def __detach_led(self, led: Led):
         controller = self.__find_led_controller(led)
         if not controller:
             return
 
         controller.remove_led(led)
 
-    def __add_led_control(self, led, config: ControllerParameters):
+    def __attach_led(self, led: Led, config: ControllerParameters):
         controller = self.__find_compatible_controller(config)
         if not controller:
             controller = ControllerFactory.build(config)
-            self.__controllers.append(controller)
+            if not controller:
+                return
 
-        if not controller:
-            return
+            self.__controllers.append(controller)
 
         controller.add_led(led)
 
-    def __create_led(self, config) -> Led:
+    def __find_led(self, config: LedParameters) -> Led:
         if config.led_name in self.__leds:
             return self.__leds[config.led_name]
 
@@ -62,10 +63,10 @@ class Server:
 
         return led
 
-    def __apply_config(self, config):
-        led = self.__create_led(config.led)
-        self.__remove_led_control(led)
-        self.__add_led_control(led, config.controller)
+    def __apply_config(self, config: LedControllerParameters):
+        led = self.__find_led(config.led)
+        self.__detach_led(led)
+        self.__attach_led(led, config.controller)
 
     def __receive_config(self, connection):
         config_data = b''

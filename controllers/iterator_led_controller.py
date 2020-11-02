@@ -13,13 +13,12 @@ class IteratorLedController(ThreadLedController):
         if not self.__current_colors:
             self.__current_colors = self.__colors[::]
 
-        return self.__current_colors.pop()
+        return self.__current_colors.pop(0)
 
     def __work(self):
         color = self.__get_next_color()
         while not self._should_stop_thread:
             next_color = self.__get_next_color()
             for led in self._leds:
-                print("setting led {}".format(led.name))
                 led.do_animated_color(color, next_color, self.__update_time)
             color = next_color
