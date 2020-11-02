@@ -11,7 +11,7 @@ class ControllerFactory:
         elif config.controller_type == ControllerType.COLORS:
             controller = IteratorLedController(config)
         elif config.controller_type == ControllerType.NONE:
-            return
+            return None
         else:
             raise ValueError('Unsupported controller type')
 

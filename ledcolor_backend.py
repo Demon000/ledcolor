@@ -47,6 +47,9 @@ class Server:
             controller = ControllerFactory.build(config)
             self.__controllers.append(controller)
 
+        if not controller:
+            return
+
         controller.add_led(led)
 
     def __create_led(self, config) -> Led:
