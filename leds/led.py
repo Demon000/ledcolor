@@ -1,23 +1,25 @@
 import time
 from abc import ABC, abstractmethod
+from threading import Condition, Thread
 
 from utils.animated_color import AnimatedColor
 
 
 class Led(ABC):
     def __init__(self, led_name):
-        self._last_color = None
         self.name = led_name
+
+        self.__last_color = None
 
     @abstractmethod
     def _set_color(self, color):
         pass
 
     def set_color(self, color):
-        if self._last_color is not None and self._last_color == color:
+        if self.__last_color == color:
             return
 
-        self._last_color = color
+        self.__last_color = color
         self._set_color(color)
 
     def do_on_color(self, color):
