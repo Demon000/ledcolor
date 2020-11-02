@@ -1,6 +1,6 @@
 from threading import Thread
 
-from led_controller import LedController
+from controllers.led_controller import LedController
 
 
 class ThreadLedController(LedController):

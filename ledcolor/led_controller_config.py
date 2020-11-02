@@ -22,18 +22,23 @@ class ControllerType(StringEnum):
     NONE = 'none'
 
 
-class Config:
+class LedConfig:
     def __init__(self, args):
         self.led_name = args.led_name
         self.led_type = args.led_type
-        self.controller_type = args.controller_type
-        self.update_time = args.update_time
 
         if self.led_type not in LedType.list():
             raise Exception('`{}` is not a valid led type'.format(self.led_type))
 
+
+class ControllerConfig:
+    def __init__(self, args):
+        self.controller_type = args.controller_type
+
         if self.controller_type not in ControllerType.list():
-            raise Exception('`{}` is not a valid controller type'.format(self.led_type))
+            raise Exception('`{}` is not a valid controller type'.format(self.controller_type))
+
+        self.update_time = args.update_time
 
         self.input_name = None
         self.low_color = None
@@ -42,7 +47,6 @@ class Config:
 
         if args.controller_type == ControllerType.SOUND:
             self.input_name = args.input_name
-
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
         elif args.controller_type == ControllerType.COLORS:
@@ -71,6 +75,12 @@ class Config:
             return False
 
         return True
+
+
+class LedControllerConfig:
+    def __init__(self, args):
+        self.led = LedConfig(args)
+        self.controller = ControllerConfig(args)
 
     def serialize(self):
         return pickle.dumps(self)

@@ -3,7 +3,7 @@ import soundcard as sc
 
 from color import Color
 from constants import *
-from thread_led_controller import ThreadLedController
+from controllers.thread_led_controller import ThreadLedController
 
 
 class SoundLedController(ThreadLedController):

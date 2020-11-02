@@ -3,8 +3,8 @@
 import socket
 import os
 
-from sound_led_controller import SoundLedController
-from iterator_led_controller import IteratorLedController
+from controllers.sound_led_controller import SoundLedController
+from controllers.iterator_led_controller import IteratorLedController
 from led import Led
 from led_controller_config import LedControllerConfig, ControllerType
 from constants import server_address

@@ -1,4 +1,4 @@
-from thread_led_controller import ThreadLedController
+from controllers.thread_led_controller import ThreadLedController
 
 
 class IteratorLedController(ThreadLedController):
