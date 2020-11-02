@@ -6,7 +6,8 @@ import os
 from controllers.sound_led_controller import SoundLedController
 from controllers.iterator_led_controller import IteratorLedController
 from utils.led import Led
-from parameters.led_controller_parameters import LedControllerParameters, ControllerType
+from parameters.led_controller_parameters import LedControllerParameters
+from parameters.controller_parameters import ControllerType
 from config import SERVER_ADDRESS
 
 

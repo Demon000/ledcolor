@@ -3,7 +3,9 @@
 import socket
 from argparse import ArgumentParser
 
-from parameters.led_controller_parameters import LedControllerParameters, ControllerType, LedType
+from parameters.led_controller_parameters import LedControllerParameters
+from parameters.controller_parameters import ControllerType
+from parameters.led_parameters import LedType
 from config import *
 
 
