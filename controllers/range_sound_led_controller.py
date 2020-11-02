@@ -51,6 +51,7 @@ class RangeSoundLedController(SoundLedController):
             led.set_color(color)
 
     def _handle_sample(self, data):
-        volume = np.max(data)
+        volume = np.abs(data)
+        volume = np.max(volume)
         volume = self.__normalize_volume(volume)
         self.__set_volume(volume)
