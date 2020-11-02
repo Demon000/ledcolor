@@ -37,8 +37,8 @@ def main():
     {}
     """.format(', '.join(LedType.list())))
 
-    parser.add_argument('controller', choices=ControllerType.list(), help="""
-    Controller type to use, avilable types:
+    parser.add_argument('controller_type', choices=ControllerType.list(), help="""
+    Controller type to use, available types:
     {}
     """.format(', '.join(ControllerType.list())))
 
