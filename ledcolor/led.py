@@ -2,7 +2,7 @@ import os
 import time
 
 from color import AnimatedColor
-from config import LedType
+from led_controller_config import LedType
 
 
 class Led:

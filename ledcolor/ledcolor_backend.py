@@ -6,7 +6,7 @@ import os
 from sound_led_controller import SoundLedController
 from iterator_led_controller import IteratorLedController
 from led import Led
-from config import Config, ControllerType
+from led_controller_config import LedControllerConfig, ControllerType
 from constants import server_address
 
 
@@ -78,7 +78,7 @@ class Server:
             else:
                 break
 
-        config = Config.deserialize(config_data)
+        config = LedControllerConfig.deserialize(config_data)
         try:
             self.__apply_config(config)
         except ValueError as ve:
