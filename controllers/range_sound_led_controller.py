@@ -40,8 +40,6 @@ class RangeSoundLedController(SoundLedController):
         else:
             normalized_volume = (volume - min_volume) / (max_volume - min_volume)
 
-        normalized_volume *= normalized_volume
-
         return normalized_volume
 
     def __set_volume(self, volume):
