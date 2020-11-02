@@ -8,6 +8,7 @@ from controllers.controller_factory import ControllerFactory
 from controllers.led_controller import LedController
 from leds.led import Led
 from leds.led_factory import LedFactory
+from parameters.controller_parameters import ControllerParameters
 from parameters.led_controller_parameters import LedControllerParameters
 from config import SERVER_ADDRESS
 
@@ -20,7 +21,7 @@ class Server:
         self.__leds = {}
         self.__controllers = []
 
-    def __find_compatible_controller(self, config) -> Union[LedController, None]:
+    def __find_compatible_controller(self, config: ControllerParameters) -> Union[LedController, None]:
         for controller in self.__controllers:
             if controller.is_compatible_config(config):
                 return controller
@@ -41,7 +42,7 @@ class Server:
 
         controller.remove_led(led)
 
-    def __add_led_control(self, led, config):
+    def __add_led_control(self, led, config: ControllerParameters):
         controller = self.__find_compatible_controller(config)
         if not controller:
             controller = ControllerFactory.build(config)
