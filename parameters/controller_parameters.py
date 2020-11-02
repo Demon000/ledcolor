@@ -31,7 +31,7 @@ class ControllerParameters:
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
         elif args.controller_type == ControllerType.COLORS:
-            self.colors = cycle(args_to_colors(args.color))
+            self.colors = args_to_colors(args.color)
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, self.__class__):
