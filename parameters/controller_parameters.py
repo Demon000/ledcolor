@@ -1,19 +1,7 @@
-from enum import Enum
 from itertools import cycle
-import pickle
 
-from helpers import args_to_colors, color_from_string
-
-
-class StringEnum(str, Enum):
-    @classmethod
-    def list(cls):
-        return list(map(lambda c: c.value, cls))
-
-
-class LedType(StringEnum):
-    SYSFS_RGB = 'sysfs_rgb'
-    SYSFS_LINEAR = 'sysfs_linear'
+from utils.helpers import color_from_string, args_to_colors
+from utils.string_enum import StringEnum
 
 
 class ControllerType(StringEnum):
@@ -22,16 +10,7 @@ class ControllerType(StringEnum):
     NONE = 'none'
 
 
-class LedConfig:
-    def __init__(self, args):
-        self.led_name = args.led_name
-        self.led_type = args.led_type
-
-        if self.led_type not in LedType.list():
-            raise Exception('`{}` is not a valid led type'.format(self.led_type))
-
-
-class ControllerConfig:
+class ControllerParameters:
     def __init__(self, args):
         self.controller_type = args.controller_type
 
@@ -75,16 +54,3 @@ class ControllerConfig:
             return False
 
         return True
-
-
-class LedControllerConfig:
-    def __init__(self, args):
-        self.led = LedConfig(args)
-        self.controller = ControllerConfig(args)
-
-    def serialize(self):
-        return pickle.dumps(self)
-
-    @staticmethod
-    def deserialize(serialization):
-        return pickle.loads(serialization)

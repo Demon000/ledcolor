@@ -3,7 +3,7 @@
 import socket
 from argparse import ArgumentParser
 
-from led_controller_config import LedControllerConfig, ControllerType, LedType
+from parameters.led_controller_parameters import LedControllerParameters, ControllerType, LedType
 from constants import *
 
 
@@ -64,7 +64,7 @@ def main():
     """)
 
     args = parser.parse_args()
-    config = LedControllerConfig(args)
+    config = LedControllerParameters(args)
     client = Client(server_address)
 
     client.start()

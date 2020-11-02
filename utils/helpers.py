@@ -1,4 +1,4 @@
-from color import Color, AnimatedColor
+from utils.color import Color, AnimatedColor
 
 
 def duration_from_string(duration_string):
