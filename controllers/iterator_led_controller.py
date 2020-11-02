@@ -1,4 +1,5 @@
 from controllers.thread_led_controller import ThreadLedController
+from utils.sync_led_utils import SyncLedUtils
 
 
 class IteratorLedController(ThreadLedController):
@@ -19,6 +20,5 @@ class IteratorLedController(ThreadLedController):
         color = self.__get_next_color()
         while not self._should_stop_thread:
             next_color = self.__get_next_color()
-            for led in self._leds:
-                led.do_animated_color(color, next_color, self.__update_time)
+            SyncLedUtils.do_animated_color(self._leds, color, next_color, self.__update_time)
             color = next_color
