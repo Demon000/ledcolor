@@ -2,7 +2,7 @@ import numpy as np
 import soundcard as sc
 
 from utils.color import Color
-from constants import *
+from config import *
 from controllers.thread_led_controller import ThreadLedController
 
 
@@ -10,18 +10,18 @@ class SoundLedController(ThreadLedController):
     def __init__(self, config):
         super().__init__(self.__work, config)
 
-        self.__chunk_size = int(audio_rate * config.update_time)
+        self.__chunk_size = int(AUDIO_RATE * config.update_time)
         self.__input_name = config.input_name
 
         self.__low_color = config.low_color
         self.__high_color = config.high_color
 
         self.__recent_volume_samples = [0]
-        self.__no_recent_volume_samples = int(volume_sample_time / config.update_time)
+        self.__no_recent_volume_samples = int(VOLUME_SAMPLE_TIME / config.update_time)
 
-        self.__volume_limit = volume_low_limit
+        self.__volume_limit = VOLUME_LOW_LIMIT
         self.__volume_limit_falling = True
-        self.__volume_limit_fall = config.update_time / volume_limit_fall_time * (volume_max_limit - volume_low_limit)
+        self.__volume_limit_fall = config.update_time / VOLUME_LIMIT_FALL_TIME * (VOLUME_MAX_LIMIT - VOLUME_LOW_LIMIT)
 
     def __add_recent_volume(self, volume):
         self.__recent_volume_samples.append(volume)
@@ -58,7 +58,7 @@ class SoundLedController(ThreadLedController):
         if mic is None:
             raise ValueError("Failed to find default microphone")
 
-        with mic.recorder(audio_rate, channels=audio_channels) as mic_recorder:
+        with mic.recorder(AUDIO_RATE, channels=AUDIO_CHANNELS) as mic_recorder:
             while not self._should_stop_thread:
                 data = mic_recorder.record(numframes=self.__chunk_size)
                 volume = np.max(data)

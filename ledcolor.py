@@ -4,7 +4,7 @@ import socket
 from argparse import ArgumentParser
 
 from parameters.led_controller_parameters import LedControllerParameters, ControllerType, LedType
-from constants import *
+from config import *
 
 
 class Client:
@@ -46,7 +46,7 @@ def main():
     color_string is in one of the following formats: #ffffff ffffff #fff fff
     """)
 
-    parser.add_argument('-u', '--update-time', dest='update_time', default=default_update_time, type=float, help="""
+    parser.add_argument('-u', '--update-time', dest='update_time', default=DEFAULT_OUTPUT_TIME, type=float, help="""
     Number of seconds to pass (floating point value) between color updates
     """)
 
@@ -54,18 +54,18 @@ def main():
     Name of the input device to use when in sound mode, can be found by doing `pacmd list-sources`.
     Uses the default system microphone by default
     """)
-    parser.add_argument('-L', '--low', dest='low_color_string', default=default_low_color, type=str, help="""
+    parser.add_argument('-L', '--low', dest='low_color_string', default=DEFAULT_LOW_COLOR, type=str, help="""
     Low volume color string to use when in sound mode, specified in one of the following formats:
     #ffffff ffffff #fff fff
     """)
-    parser.add_argument('-H', '--high', dest='high_color_string', default=default_high_color, type=str, help="""
+    parser.add_argument('-H', '--high', dest='high_color_string', default=DEFAULT_HIGH_COLOR, type=str, help="""
     High volume color string to use when in sound mode, specified in one of the following formats:
     #ffffff ffffff #fff fff
     """)
 
     args = parser.parse_args()
     config = LedControllerParameters(args)
-    client = Client(server_address)
+    client = Client(SERVER_ADDRESS)
 
     client.start()
     client.send_config(config)

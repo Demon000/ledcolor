@@ -7,7 +7,7 @@ from controllers.sound_led_controller import SoundLedController
 from controllers.iterator_led_controller import IteratorLedController
 from utils.led import Led
 from parameters.led_controller_parameters import LedControllerParameters, ControllerType
-from constants import server_address
+from config import SERVER_ADDRESS
 
 
 class Server:
@@ -99,12 +99,12 @@ class Server:
 
 def main():
     try:
-        os.unlink(server_address)
+        os.unlink(SERVER_ADDRESS)
     except OSError:
-        if os.path.exists(server_address):
+        if os.path.exists(SERVER_ADDRESS):
             raise
 
-    server = Server(server_address)
+    server = Server(SERVER_ADDRESS)
     server.start()
 
 
