@@ -3,11 +3,9 @@
 import socket
 import os
 
-from controllers.sound_led_controller import SoundLedController
-from controllers.iterator_led_controller import IteratorLedController
-from utils.led import Led
+from controllers.controller_factory import ControllerFactory
+from leds.led_factory import LedFactory
 from parameters.led_controller_parameters import LedControllerParameters
-from parameters.controller_parameters import ControllerType
 from config import SERVER_ADDRESS
 
 
@@ -43,32 +41,24 @@ class Server:
     def __add_led_control(self, led, config):
         controller = self.__find_compatible_controller(config)
         if not controller:
-            if config.controller_type == ControllerType.SOUND:
-                controller = SoundLedController(config)
-            elif config.controller_type == ControllerType.COLORS:
-                controller = IteratorLedController(config)
-            elif config.controller_type == ControllerType.NONE:
-                return
-            else:
-                raise ValueError('Unsupported controller type')
-
+            controller = ControllerFactory.build(config)
             self.__controllers.append(controller)
 
         controller.add_led(led)
 
-    def __create_led(self, led_name, led_type):
-        if led_name in self.__leds:
-            return self.__leds[led_name]
+    def __create_led(self, config):
+        if config.led_name in self.__leds:
+            return self.__leds[config.led_name]
 
-        led = Led(led_name, led_type)
-        self.__leds[led_name] = led
+        led = LedFactory.build(config)
+        self.__leds[config.led_name] = led
 
         return led
 
     def __apply_config(self, config):
-        led = self.__create_led(config.led.led_name, config.led.led_type)
+        led = self.__create_led(config.led)
         self.__remove_led_control(led)
-        self.__add_led_control(led, config)
+        self.__add_led_control(led, config.controller)
 
     def __receive_config(self, connection):
         config_data = b''
