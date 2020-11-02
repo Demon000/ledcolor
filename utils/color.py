@@ -22,7 +22,10 @@ class Color:
         if not isinstance(other, self.__class__):
             return False
 
-        return self._rgb == other._rgb
+        if self._rgb != other._rgb:
+            return False
+
+        return True
 
     @property
     def rgb_brightness(self) -> int:
