@@ -15,7 +15,7 @@ class SysfsLed(Led, metaclass=ABCMeta):
 
     def __check_existence(self):
         if not os.path.isdir(self.__path):
-            raise ValueError('Led `{}` does not exist'.format(self._name))
+            raise ValueError('Led `{}` does not exist'.format(self.name))
 
     def __read_max_brightness(self):
         max_brightness_path = self.__path + 'max_brightness'

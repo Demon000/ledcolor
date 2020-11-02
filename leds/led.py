@@ -7,7 +7,7 @@ from utils.animated_color import AnimatedColor
 class Led(ABC):
     def __init__(self, led_name):
         self._last_color = None
-        self._name = led_name
+        self.name = led_name
 
     @abstractmethod
     def _set_color(self, color):

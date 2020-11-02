@@ -15,10 +15,10 @@ class RazerKeyboardLed(Led):
         device_manager.sync_effects = False
 
         for device in device_manager.devices:
-            if device.name == self._name:
+            if device.name == self.name:
                 return device
 
-        raise ValueError('Keyboard `{}` does not exist'.format(self._name))
+        raise ValueError('Keyboard `{}` does not exist'.format(self.name))
 
     def _set_color(self, color):
         no_rows = self.device.fx.advanced.rows
