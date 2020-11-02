@@ -2,13 +2,14 @@ from itertools import cycle
 from typing import Union, List
 
 from utils.color import Color
-from utils.helpers import color_from_string, args_to_colors
+from utils.helpers import color_from_string, args_to_animated_colors
 from utils.string_enum import StringEnum
 
 
 class ControllerType(StringEnum):
     COLORS = 'colors'
-    SOUND = 'sound'
+    RANGE_SOUND = 'range_sound'
+    MATRIX_SOUND = 'matrix_sound'
     NONE = 'none'
 
 
@@ -26,12 +27,14 @@ class ControllerParameters:
         self.high_color: Union[Color, None] = None
         self.colors: Union[List[Color], None] = None
 
-        if args.controller_type == ControllerType.SOUND:
+        if args.controller_type == ControllerType.RANGE_SOUND:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
         elif args.controller_type == ControllerType.COLORS:
-            self.colors = args_to_colors(args.color)
+            self.colors = args_to_animated_colors(args.color)
+        elif args.controller_type == ControllerType.MATRIX_SOUND:
+            self.color = color_from_string(args.volume_color_string)
 
     def __eq__(self, other: 'ControllerParameters') -> bool:
         if not isinstance(other, self.__class__):

@@ -34,7 +34,7 @@ def color_from_string(string) -> Color:
     return Color(rgb)
 
 
-def args_to_colors(args) -> List[Color]:
+def args_to_animated_colors(args) -> List[Color]:
     colors = []
     for arg in args:
         color_string, on_duration_string, fade_duration_string = arg.split(':')

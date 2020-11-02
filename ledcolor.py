@@ -56,12 +56,19 @@ def main():
     Name of the input device to use when in sound mode, can be found by doing `pacmd list-sources`.
     Uses the default system microphone by default
     """)
-    parser.add_argument('-L', '--low', dest='low_color_string', default=DEFAULT_LOW_COLOR, type=str, help="""
-    Low volume color string to use when in sound mode, specified in one of the following formats:
+
+    parser.add_argument('-L', '--volume', dest='volume_color_string', default=DEFAULT_VOLUME_COLOR, type=str, help="""
+    Volume color string to use when in matrix sound mode, specified in one of the following formats:
     #ffffff ffffff #fff fff
     """)
+
+    parser.add_argument('-L', '--low', dest='low_color_string', default=DEFAULT_LOW_COLOR, type=str, help="""
+    Low volume color string to use when in range sound mode, specified in one of the following formats:
+    #ffffff ffffff #fff fff
+    """)
+
     parser.add_argument('-H', '--high', dest='high_color_string', default=DEFAULT_HIGH_COLOR, type=str, help="""
-    High volume color string to use when in sound mode, specified in one of the following formats:
+    High volume color string to use when in range sound mode, specified in one of the following formats:
     #ffffff ffffff #fff fff
     """)
 
