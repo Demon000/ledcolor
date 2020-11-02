@@ -26,11 +26,11 @@ class Client:
 def main():
     parser = ArgumentParser()
 
-    parser.add_argument('name', type=str, help="""
+    parser.add_argument('led_name', type=str, help="""
     Name of the LED device
     """)
 
-    parser.add_argument('type', choices=LedType.list(), help="""
+    parser.add_argument('led_type', choices=LedType.list(), help="""
     Type of the LED device, available types:
     {}
     """.format(', '.join(LedType.list())))
