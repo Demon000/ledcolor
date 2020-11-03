@@ -24,8 +24,8 @@ class AnimatedColor(Color):
         return True
 
     def __str__(self):
-        return "AnimatedColor -> r: {}, g: {}, b: {}, on: {}, fade: {}" \
-                .format(*self._rgb, self.__on_duration, self.__fade_duration)
+        return 'AnimatedColor -> r: {}, g: {}, b: {}, on: {}, fade: {}' \
+            .format(*self._rgb, self.__on_duration, self.__fade_duration)
 
     @property
     def on_duration(self) -> float:

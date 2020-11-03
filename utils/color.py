@@ -27,6 +27,9 @@ class Color:
 
         return True
 
+    def __str__(self):
+        return 'Color -> r: {}, g: {}, b: {}'.format(*self._rgb)
+
     @property
     def rgb_brightness(self) -> int:
         return (self._rgb[0] << 16) | (self._rgb[1] << 8) | (self._rgb[2])
