@@ -36,7 +36,7 @@ class Color:
 
     @property
     def alpha_brightness(self) -> int:
-        return (self._rgb[0] + self._rgb[1] + self._rgb[2]) / 3
+        return (self._rgb[0] + self._rgb[1] + self._rgb[2]) // 3
 
     @property
     def rgb(self) -> Tuple:

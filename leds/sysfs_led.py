@@ -20,7 +20,7 @@ class SysfsLed(Led, metaclass=ABCMeta):
     def __read_max_brightness(self):
         max_brightness_path = self.__path + 'max_brightness'
         with open(max_brightness_path, 'r') as file:
-            self.__max_brightness = int(file.readline())
+            self._max_brightness = int(file.readline())
 
     def __open_brightness(self):
         brightness_path = self.__path + 'brightness'
