@@ -1,3 +1,4 @@
+import math
 from typing import Tuple, List
 
 from utils.color import Color
@@ -50,3 +51,7 @@ def args_to_animated_colors(args) -> List[Color]:
         raise Exception('No colors have been supplied')
 
     return colors
+
+
+def next_power_of_2(x):
+    return 1 if x == 0 else 2 ** math.ceil(math.log2(x))

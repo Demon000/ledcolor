@@ -25,16 +25,20 @@ class ControllerParameters:
         self.input_name: Union[str, None] = None
         self.low_color: Union[Color, None] = None
         self.high_color: Union[Color, None] = None
+        self.volume_color: Union[Color, None] = None
         self.colors: Union[List[Color], None] = None
 
         if args.controller_type == ControllerType.RANGE_SOUND:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
+        elif args.controller_type == ControllerType.MATRIX_SOUND:
+            self.input_name = args.input_name
+            self.low_color = color_from_string(args.low_color_string)
+            self.high_color = color_from_string(args.high_color_string)
+            self.volume_color = color_from_string(args.volume_color_string)
         elif args.controller_type == ControllerType.COLORS:
             self.colors = args_to_animated_colors(args.color)
-        elif args.controller_type == ControllerType.MATRIX_SOUND:
-            self.color = color_from_string(args.volume_color_string)
 
     def __eq__(self, other: 'ControllerParameters') -> bool:
         if not isinstance(other, self.__class__):

@@ -57,7 +57,7 @@ def main():
     Uses the default system microphone by default
     """)
 
-    parser.add_argument('-L', '--volume', dest='volume_color_string', default=DEFAULT_VOLUME_COLOR, type=str, help="""
+    parser.add_argument('-V', '--volume', dest='volume_color_string', default=DEFAULT_VOLUME_COLOR, type=str, help="""
     Volume color string to use when in matrix sound mode, specified in one of the following formats:
     #ffffff ffffff #fff fff
     """)
