@@ -6,7 +6,7 @@ from utils.tuple_helpers import t_add_w
 class Color:
     def __init__(self, rgb: Union['Color', Tuple],
                  into_rgb: Union['Color', Tuple, None] = None,
-                 weight: Union[int, None] = None):
+                 weight: Union[float, None] = None):
         if isinstance(rgb, Color):
             rgb = rgb.rgb
 
