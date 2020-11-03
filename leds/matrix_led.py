@@ -16,6 +16,14 @@ class MatrixLed(Led, metaclass=ABCMeta):
     def _set_color_matrix(self, color_matrix):
         pass
 
+    @abstractmethod
+    def set_color_cell(self, x, y, color):
+        pass
+
+    @abstractmethod
+    def draw_cells(self):
+        pass
+
     def set_color_matrix(self, color_matrix):
         if len(color_matrix) != self.get_height():
             raise ValueError("Color matrix height doesn't match")
