@@ -24,7 +24,6 @@ class ControllerParameters:
         self.input_name: Union[str, None] = None
         self.low_color: Union[Color, None] = None
         self.high_color: Union[Color, None] = None
-        self.volume_color: Union[Color, None] = None
         self.colors: Union[List[Color], None] = None
 
         if args.controller_type == ControllerType.SIMPLE_SOUND:
@@ -35,7 +34,6 @@ class ControllerParameters:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
-            self.volume_color = color_from_string(args.volume_color_string)
         elif args.controller_type == ControllerType.COLORS:
             self.colors = args_to_animated_colors(args.color)
 
