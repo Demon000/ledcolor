@@ -1,7 +1,6 @@
 import numpy as np
-from more_itertools import pairwise
 
-from config import AUDIO_RATE, AUDIBLE_LOW_FREQ, AUDIBLE_HIGH_FREQ, AUDIBLE_RANGES_HIGH_FREQ
+from config import AUDIO_RATE, AUDIBLE_LOW_FREQ, AUDIBLE_HIGH_FREQ, FREQ_GROUPS_GAMMA
 from controllers.sound_led_controller import SoundLedController
 from leds.led import Led
 from leds.matrix_led import MatrixLed
@@ -18,6 +17,13 @@ def get_volume_avg(amplitudes):
     return np.average(amplitudes)
 
 
+def get_volume_sum(amplitudes):
+    s = np.sum(amplitudes)
+    if s > 1.0:
+        s = 1.0
+    return s
+
+
 class FourierSoundLedController(SoundLedController):
     def __init__(self, config: ControllerParameters):
         super().__init__(config)
@@ -26,6 +32,8 @@ class FourierSoundLedController(SoundLedController):
             self.__value_fn = get_volume_max
         elif config.value_mode == FourierValueMode.AVG:
             self.__value_fn = get_volume_avg
+        elif config.value_mode == FourierValueMode.SUM:
+            self.__value_fn = get_volume_sum
 
         self.__low_color: Color = config.low_color
         self.__high_color: Color = config.high_color
@@ -34,41 +42,31 @@ class FourierSoundLedController(SoundLedController):
         freqs = freqs[:self._chunk_size // 2]
         freqs = freqs * AUDIO_RATE // self._chunk_size
 
-        self.__audible_ranges = []
-        audible_range_index = 0
-        start_audible_index = 0
-        end_audible_index = 0
+        self.__audible_index_start = 0
+        self.__audible_index_end = 0
         for i, freq in enumerate(freqs):
-            if audible_range_index < len(AUDIBLE_RANGES_HIGH_FREQ) and \
-                    freq > AUDIBLE_RANGES_HIGH_FREQ[audible_range_index]:
-                self.__audible_ranges.append(i)
-                audible_range_index += 1
-
             if freq < AUDIBLE_LOW_FREQ:
-                start_audible_index = i
+                self.__audible_index_start = i
 
             if freq > AUDIBLE_HIGH_FREQ:
-                end_audible_index = i
+                self.__audible_index_end = i
                 break
 
-        self.__audible_ranges.insert(0, start_audible_index)
-        self.__audible_ranges.append(end_audible_index)
-
-        self.__freqs = freqs[start_audible_index:end_audible_index]
+        self.__freqs = freqs[self.__audible_index_start:self.__audible_index_end]
 
         normalizer_samples = int(self._chunks_per_sec * self._chunk_size)
         self.__volume_normalizer = VolumeNormalizer(normalizer_samples)
 
     def __group_amplitudes(self, amplitudes, no_groups=None):
-        groups = []
+        amplitudes = amplitudes[self.__audible_index_start:self.__audible_index_end]
 
-        for i, (start, end) in enumerate(pairwise(self.__audible_ranges)):
-            if not no_groups or i + 1 < no_groups:
-                groups.append(amplitudes[start:end])
-            else:
-                end = self.__audible_ranges[-1]
-                groups.append(amplitudes[start:end])
-                break
+        groups = [[] for _ in range(no_groups)]
+        max_freq = self.__freqs[-1]
+        for freq, amplitude in zip(self.__freqs, amplitudes):
+            group_index = int(((freq / max_freq) ** (1 / FREQ_GROUPS_GAMMA)) * no_groups)
+            if group_index >= no_groups:
+                group_index = no_groups - 1
+            groups[group_index].append(amplitude)
 
         return groups
 

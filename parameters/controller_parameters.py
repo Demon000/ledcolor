@@ -15,6 +15,7 @@ class ControllerType(StringEnum):
 class FourierValueMode(StringEnum):
     AVG = 'average'
     MAX = 'max'
+    SUM = 'sum'
 
 
 class ControllerParameters:
