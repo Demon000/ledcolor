@@ -1,4 +1,4 @@
-from utils.string_enum import StringEnum
+from utils.string_enums import StringEnum
 
 
 class LedType(StringEnum):

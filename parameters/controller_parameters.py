@@ -2,7 +2,7 @@ from typing import Union, List
 
 from utils.color import Color
 from utils.helpers import color_from_string, args_to_animated_colors
-from utils.string_enum import StringEnum
+from utils.string_enums import StringEnum
 
 
 class ControllerType(StringEnum):
@@ -10,6 +10,11 @@ class ControllerType(StringEnum):
     SIMPLE_SOUND = 'simple_sound'
     FOURIER_SOUND = 'fourier_sound'
     NONE = 'none'
+
+
+class FourierValueMode(StringEnum):
+    AVG = 'average'
+    MAX = 'max'
 
 
 class ControllerParameters:
@@ -25,6 +30,7 @@ class ControllerParameters:
         self.low_color: Union[Color, None] = None
         self.high_color: Union[Color, None] = None
         self.colors: Union[List[Color], None] = None
+        self.value_mode: Union[str, None] = None
 
         if args.controller_type == ControllerType.SIMPLE_SOUND:
             self.input_name = args.input_name
@@ -34,6 +40,7 @@ class ControllerParameters:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
+            self.value_mode = args.value_mode
         elif args.controller_type == ControllerType.COLORS:
             self.colors = args_to_animated_colors(args.color)
 
@@ -57,6 +64,9 @@ class ControllerParameters:
             return False
 
         if self.colors != other.colors:
+            return False
+
+        if self.value_mode != other.value_mode:
             return False
 
         return True

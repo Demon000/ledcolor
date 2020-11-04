@@ -5,14 +5,27 @@ from config import AUDIO_RATE, AUDIBLE_LOW_FREQ, AUDIBLE_HIGH_FREQ, AUDIBLE_RANG
 from controllers.sound_led_controller import SoundLedController
 from leds.led import Led
 from leds.matrix_led import MatrixLed
-from parameters.controller_parameters import ControllerParameters
+from parameters.controller_parameters import ControllerParameters, FourierValueMode
 from utils.color import Color
 from utils.volume_normalizer import VolumeNormalizer
+
+
+def get_volume_max(amplitudes):
+    return np.max(amplitudes)
+
+
+def get_volume_avg(amplitudes):
+    return np.average(amplitudes)
 
 
 class FourierSoundLedController(SoundLedController):
     def __init__(self, config: ControllerParameters):
         super().__init__(config)
+
+        if config.value_mode == FourierValueMode.MAX:
+            self.__value_fn = get_volume_max
+        elif config.value_mode == FourierValueMode.AVG:
+            self.__value_fn = get_volume_avg
 
         self.__low_color: Color = config.low_color
         self.__high_color: Color = config.high_color
@@ -66,10 +79,10 @@ class FourierSoundLedController(SoundLedController):
         chunks = self.__group_amplitudes(amplitudes, height)
 
         for i, chunk in enumerate(chunks):
-            average_volume = np.max(chunk)
+            volume = self.__value_fn(chunk)
 
-            width_active = int(width * average_volume)
-            width_inactive = int(width * (1 - average_volume))
+            width_active = int(width * volume)
+            width_inactive = int(width * (1 - volume))
 
             for j in range(width_active):
                 led.set_color_cell(j, i, self.__high_color)

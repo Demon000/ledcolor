@@ -4,7 +4,7 @@ import socket
 from argparse import ArgumentParser
 
 from parameters.led_controller_parameters import LedControllerParameters
-from parameters.controller_parameters import ControllerType
+from parameters.controller_parameters import ControllerType, FourierValueMode
 from parameters.led_parameters import LedType
 from config import *
 
@@ -41,6 +41,14 @@ def main():
     Controller type to use, available types:
     {}
     """.format(', '.join(ControllerType.list())))
+
+    parser.add_argument('-V', '--value-mode', dest='value_mode', choices=FourierValueMode.list(),
+                        default=FourierValueMode.MAX, help="""
+    Value mode to use when in fourier sound mode. This determines how the individual frequencies affect
+    the resulting bar. Available types:
+    {}
+    Default type: {}
+    """.format(', '.join(FourierValueMode.list()), FourierValueMode.MAX))
 
     parser.add_argument('color', type=str, nargs='*', help="""
     Multiple colors to cycle through when in colors mode, defined in the following format
