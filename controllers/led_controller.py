@@ -1,10 +1,11 @@
+from abc import ABC, abstractmethod
 from typing import List
 
 from leds.led import Led
 from parameters.controller_parameters import ControllerParameters
 
 
-class LedController:
+class LedController(ABC):
     def __init__(self, config):
         self._leds: List[Led] = []
         self._config: ControllerParameters = config
@@ -33,8 +34,10 @@ class LedController:
     def has_leds(self) -> bool:
         return len(self._leds) != 0
 
+    @abstractmethod
     def start(self):
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def stop(self):
-        raise NotImplementedError()
+        pass
