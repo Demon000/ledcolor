@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
+import signal
 import socket
 import os
-from typing import Union
+import sys
+from functools import partial
+from threading import Thread
+from typing import Union, List, Dict
 
 from controllers.controller_factory import ControllerFactory
 from controllers.led_controller import LedController
@@ -10,7 +14,7 @@ from leds.led import Led
 from leds.led_factory import LedFactory
 from parameters.controller_parameters import ControllerParameters
 from parameters.led_controller_parameters import LedControllerParameters
-from config import SERVER_ADDRESS
+from config import SERVER_ADDRESS, SERVER_WAIT_TIMEOUT
 from parameters.led_parameters import LedParameters
 
 
@@ -18,9 +22,12 @@ class Server:
     def __init__(self, address):
         self.__server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.__server.bind(address)
+        self.__server.settimeout(SERVER_WAIT_TIMEOUT)
+        self.__thread = Thread(target=self.__wait_for_connection)
+        self.__should_stop = False
 
-        self.__leds = {}
-        self.__controllers = []
+        self.__leds: Dict[str, Led] = {}
+        self.__controllers: List[LedController] = []
 
     def __find_compatible_controller(self, config: ControllerParameters) -> Union[LedController, None]:
         for controller in self.__controllers:
@@ -84,16 +91,31 @@ class Server:
             print(ve)
 
     def __wait_for_connection(self):
-        while True:
-            connection, _ = self.__server.accept()
+        while not self.__should_stop:
             try:
-                self.__receive_config(connection)
-            finally:
-                connection.close()
+                connection, _ = self.__server.accept()
+            except socket.timeout:
+                continue
+
+            self.__receive_config(connection)
+            connection.close()
 
     def start(self):
         self.__server.listen(1)
         self.__wait_for_connection()
+
+    def __stop_controllers(self):
+        for controller in self.__controllers:
+            controller.stop()
+
+    def stop(self):
+        self.__should_stop = True
+        self.__stop_controllers()
+
+
+def cleanup(server, signal, frame):
+    server.stop()
+    sys.exit(0)
 
 
 def main():
@@ -104,6 +126,9 @@ def main():
             raise
 
     server = Server(SERVER_ADDRESS)
+
+    signal.signal(signal.SIGINT, partial(cleanup, server))
+
     server.start()
 
 

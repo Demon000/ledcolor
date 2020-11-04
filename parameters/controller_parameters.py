@@ -2,7 +2,7 @@ from typing import Union, List
 
 from utils.color import Color
 from utils.helpers import color_from_string, args_to_animated_colors
-from utils.string_enums import StringEnum
+from utils.string_enum import StringEnum
 
 
 class ControllerType(StringEnum):

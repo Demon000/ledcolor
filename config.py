@@ -1,4 +1,5 @@
 SERVER_ADDRESS = '/tmp/ledcolor_socket'
+SERVER_WAIT_TIMEOUT = 1.0
 
 AUDIO_CHANNELS = [0]
 AUDIO_RATE = 48000
