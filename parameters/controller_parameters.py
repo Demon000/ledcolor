@@ -1,4 +1,3 @@
-from itertools import cycle
 from typing import Union, List
 
 from utils.color import Color
@@ -8,8 +7,8 @@ from utils.string_enum import StringEnum
 
 class ControllerType(StringEnum):
     COLORS = 'colors'
-    RANGE_SOUND = 'range_sound'
-    MATRIX_SOUND = 'matrix_sound'
+    SIMPLE_SOUND = 'simple_sound'
+    FOURIER_SOUND = 'fourier_sound'
     NONE = 'none'
 
 
@@ -28,11 +27,11 @@ class ControllerParameters:
         self.volume_color: Union[Color, None] = None
         self.colors: Union[List[Color], None] = None
 
-        if args.controller_type == ControllerType.RANGE_SOUND:
+        if args.controller_type == ControllerType.SIMPLE_SOUND:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)
-        elif args.controller_type == ControllerType.MATRIX_SOUND:
+        elif args.controller_type == ControllerType.FOURIER_SOUND:
             self.input_name = args.input_name
             self.low_color = color_from_string(args.low_color_string)
             self.high_color = color_from_string(args.high_color_string)

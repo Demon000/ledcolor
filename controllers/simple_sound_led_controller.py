@@ -5,14 +5,12 @@ from parameters.controller_parameters import ControllerParameters
 from utils.volume_normalizer import VolumeNormalizer
 from utils.color import Color
 
-from config import *
 
-
-class RangeSoundLedController(SoundLedController):
+class SimpleSoundLedController(SoundLedController):
     def __init__(self, config: ControllerParameters):
         super().__init__(config)
 
-        normalizer_samples = int(VOLUME_SAMPLE_TIME // config.update_time)
+        normalizer_samples = int(self._chunks_per_sec)
         self.__volume_normalizer = VolumeNormalizer(normalizer_samples)
         self.__low_color: Color = config.low_color
         self.__high_color: Color = config.high_color
