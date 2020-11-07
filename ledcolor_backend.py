@@ -40,7 +40,9 @@ class Server:
         if controller:
             return controller
 
-        return ControllerFactory.build(config)
+        controller = ControllerFactory.build(config)
+        self.__controllers.append(controller)
+        return controller
 
     def __detach_led(self, name: str):
         for controller in self.__controllers:

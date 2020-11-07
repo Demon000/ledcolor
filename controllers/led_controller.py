@@ -31,6 +31,8 @@ class LedController(ABC):
 
     def remove_led(self, *args, **kwargs):
         led = self.find_led(*args, **kwargs)
+        if not led:
+            return
 
         try:
             self._leds.remove(led)
