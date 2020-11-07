@@ -1,5 +1,7 @@
 import math
-from typing import Tuple, List
+from typing import Tuple, List, Any
+
+import numpy as np
 
 from utils.color import Color
 from utils.animated_color import AnimatedColor
@@ -55,3 +57,7 @@ def args_to_animated_colors(args) -> List[Color]:
 
 def next_power_of_2(x):
     return 1 if x == 0 else 2 ** math.ceil(math.log2(x))
+
+
+def flip_2d_list(l: List[List[Any]]):
+    return np.rot90(l).tolist()

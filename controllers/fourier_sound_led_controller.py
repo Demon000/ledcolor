@@ -1,12 +1,12 @@
 import numpy as np
 
-from config import AUDIO_RATE, AUDIBLE_LOW_FREQ, AUDIBLE_HIGH_FREQ, FREQ_GROUPS_GAMMA
+from config import AUDIO_RATE, AUDIBLE_LOW_FREQ, AUDIBLE_HIGH_FREQ, FREQ_GROUPS_GAMMA, VOLUME_LIMIT_FALL_TIME
 from controllers.sound_led_controller import SoundLedController
 from leds.led import Led
 from leds.matrix_led import MatrixLed
 from parameters.controller_parameters import ControllerParameters, FourierValueMode
 from utils.color import Color
-from utils.volume_normalizer import VolumeNormalizer
+from utils.value_normalizer import ValueNormalizer
 
 
 def get_volume_max(amplitudes):
@@ -54,12 +54,25 @@ class FourierSoundLedController(SoundLedController):
 
         self.__freqs = freqs[self.__audible_index_start:self.__audible_index_end]
 
-        normalizer_samples = int(self._chunks_per_sec * self._chunk_size)
-        self.__volume_normalizer = VolumeNormalizer(normalizer_samples)
+        self.__normalizer_samples = int(self._chunks_per_sec * VOLUME_LIMIT_FALL_TIME)
+        self.__max_volume_normalizer = ValueNormalizer(self.__normalizer_samples)
+        self.__group_volume_normalizers = {}
+
+    def __create_group_normalizers(self, no_groups):
+        if no_groups in self.__group_volume_normalizers:
+            return
+
+        self.__group_volume_normalizers[no_groups] = \
+            [ValueNormalizer(self.__normalizer_samples) for _ in range(no_groups)]
+
+    def __normalize_group_volume(self, group_index, no_groups, volume):
+        normalizer = self.__group_volume_normalizers[no_groups][group_index]
+        return normalizer.normalize_value(volume)
+
+    def __normalize_max_volume(self, max_volume):
+        return self.__max_volume_normalizer.normalize_value(max_volume)
 
     def __group_amplitudes(self, amplitudes, no_groups=None):
-        amplitudes = amplitudes[self.__audible_index_start:self.__audible_index_end]
-
         groups = [[] for _ in range(no_groups)]
         max_freq = self.__freqs[-1]
         for freq, amplitude in zip(self.__freqs, amplitudes):
@@ -75,23 +88,30 @@ class FourierSoundLedController(SoundLedController):
         width = led.get_width()
 
         chunks = self.__group_amplitudes(amplitudes, height)
+        color_matrix = []
+
+        self.__create_group_normalizers(height)
 
         for i, chunk in enumerate(chunks):
+            row = []
+
             volume = self.__value_fn(chunk)
+            volume = self.__normalize_group_volume(i, height, volume)
 
             width_active = int(width * volume)
-            width_inactive = int(width * (1 - volume))
+            for x in range(width):
+                if x < width_active:
+                    row.append(self.__high_color)
+                else:
+                    row.append(self.__low_color)
 
-            for j in range(width_active):
-                led.set_color_cell(j, i, self.__high_color)
+            color_matrix.append(row)
 
-            for j in range(width_inactive):
-                led.set_color_cell(width_active + j, i, self.__low_color)
-
-        led.draw_cells()
+        led.set_color_matrix(color_matrix)
 
     def __set_simple_volume(self, led, max_amplitude):
-        color = Color(self.__low_color, self.__high_color, max_amplitude)
+        volume = self.__normalize_max_volume(max_amplitude)
+        color = Color(self.__low_color, self.__high_color, volume)
         led.set_color(color)
 
     def __set_volume(self, amplitudes, max_amplitude):
@@ -106,9 +126,7 @@ class FourierSoundLedController(SoundLedController):
         amplitudes = np.fft.fft(data)
         amplitudes = amplitudes[:self._chunk_size // 2]
         amplitudes = abs(amplitudes)
-
-        amplitudes = self.__volume_normalizer.normalize_volumes(amplitudes)
-        audible_amplitudes = self.__group_amplitudes(amplitudes, 1)[0]
-        max_amplitude = np.max(audible_amplitudes)
+        amplitudes = amplitudes[self.__audible_index_start:self.__audible_index_end]
+        max_amplitude = np.max(amplitudes)
 
         self.__set_volume(amplitudes, max_amplitude)

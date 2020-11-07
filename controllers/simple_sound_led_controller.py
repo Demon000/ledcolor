@@ -2,7 +2,7 @@ import numpy as np
 
 from controllers.sound_led_controller import SoundLedController
 from parameters.controller_parameters import ControllerParameters
-from utils.volume_normalizer import VolumeNormalizer
+from utils.value_normalizer import ValueNormalizer
 from utils.color import Color
 
 
@@ -11,7 +11,7 @@ class SimpleSoundLedController(SoundLedController):
         super().__init__(config)
 
         normalizer_samples = int(self._chunks_per_sec)
-        self.__volume_normalizer = VolumeNormalizer(normalizer_samples)
+        self.__volume_normalizer = ValueNormalizer(normalizer_samples)
         self.__low_color: Color = config.low_color
         self.__high_color: Color = config.high_color
 
@@ -24,5 +24,5 @@ class SimpleSoundLedController(SoundLedController):
     def _handle_sample(self, data):
         volume = np.abs(data)
         volume = np.max(volume)
-        volume = self.__volume_normalizer.normalize_volume(volume)
+        volume = self.__volume_normalizer.normalize_value(volume)
         self.__set_volume(volume)

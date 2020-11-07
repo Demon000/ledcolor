@@ -12,7 +12,7 @@ from controllers.controller_factory import ControllerFactory
 from controllers.led_controller import LedController
 from leds.led import Led
 from leds.led_factory import LedFactory
-from parameters.controller_parameters import ControllerParameters
+from parameters.controller_parameters import ControllerParameters, ControllerType
 from parameters.led_controller_parameters import LedControllerParameters
 from config import SERVER_ADDRESS, SERVER_WAIT_TIMEOUT
 from parameters.led_parameters import LedParameters
@@ -26,7 +26,6 @@ class Server:
         self.__thread = Thread(target=self.__wait_for_connection)
         self.__should_stop = False
 
-        self.__leds: Dict[str, Led] = {}
         self.__controllers: List[LedController] = []
 
     def __find_compatible_controller(self, config: ControllerParameters) -> Union[LedController, None]:
@@ -36,44 +35,25 @@ class Server:
 
         return None
 
-    def __find_led_controller(self, led: Led) -> Union[LedController, None]:
-        for controller in self.__controllers:
-            if controller.controls_led(led):
-                return controller
-
-        return None
-
-    def __detach_led(self, led: Led):
-        controller = self.__find_led_controller(led)
-        if not controller:
-            return
-
-        controller.remove_led(led)
-
-    def __attach_led(self, led: Led, config: ControllerParameters):
+    def __get_compatible_controller(self, config: ControllerParameters) -> LedController:
         controller = self.__find_compatible_controller(config)
-        if not controller:
-            controller = ControllerFactory.build(config)
-            if not controller:
-                return
+        if controller:
+            return controller
 
-            self.__controllers.append(controller)
+        return ControllerFactory.build(config)
 
-        controller.add_led(led)
-
-    def __find_led(self, config: LedParameters) -> Led:
-        if config.led_name in self.__leds:
-            return self.__leds[config.led_name]
-
-        led = LedFactory.build(config)
-        self.__leds[config.led_name] = led
-
-        return led
+    def __detach_led(self, name: str):
+        for controller in self.__controllers:
+            controller.remove_led(name)
 
     def __apply_config(self, config: LedControllerParameters):
-        led = self.__find_led(config.led)
-        self.__detach_led(led)
-        self.__attach_led(led, config.controller)
+        self.__detach_led(config.led.led_name)
+        if config.controller.controller_type == ControllerType.NONE:
+            return
+
+        led = LedFactory.build(config.led)
+        controller = self.__get_compatible_controller(config.controller)
+        controller.add_led(led)
 
     def __receive_config(self, connection):
         config_data = b''

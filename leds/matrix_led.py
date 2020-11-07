@@ -1,27 +1,38 @@
 from abc import abstractmethod, ABCMeta
 
 from leds.led import Led
+from parameters.led_parameters import LedParameters
+from utils.helpers import flip_2d_list
 
 
 class MatrixLed(Led, metaclass=ABCMeta):
+    def __init__(self, config: LedParameters):
+        super().__init__(config)
+
+        self.__flipped = config.led_matrix_flip
+
     @abstractmethod
-    def get_width(self):
+    def _get_width(self):
         pass
 
     @abstractmethod
-    def get_height(self):
+    def _get_height(self):
         pass
+
+    def get_width(self):
+        if self.__flipped:
+            return self._get_height()
+        else:
+            return self._get_width()
+
+    def get_height(self):
+        if self.__flipped:
+            return self._get_width()
+        else:
+            return self._get_height()
 
     @abstractmethod
     def _set_color_matrix(self, color_matrix):
-        pass
-
-    @abstractmethod
-    def set_color_cell(self, x, y, color):
-        pass
-
-    @abstractmethod
-    def draw_cells(self):
         pass
 
     def set_color_matrix(self, color_matrix):
@@ -30,5 +41,8 @@ class MatrixLed(Led, metaclass=ABCMeta):
 
         if len(color_matrix[0]) != self.get_width():
             raise ValueError("Color matrix width doesn't match")
+
+        if self.__flipped:
+            color_matrix = flip_2d_list(color_matrix)
 
         self._set_color_matrix(color_matrix)

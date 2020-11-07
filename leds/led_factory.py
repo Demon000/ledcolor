@@ -9,10 +9,10 @@ class LedFactory:
     @staticmethod
     def build(config: LedParameters) -> Led:
         if config.led_type == LedType.SYSFS_RGB:
-            return SysfsRgbLed(config.led_name)
+            return SysfsRgbLed(config)
         elif config.led_type == LedType.SYSFS_LINEAR:
-            return SysfsLinearLed(config.led_name)
+            return SysfsLinearLed(config)
         elif config.led_type == LedType.RAZER_KEYBOARD:
-            return RazerKeyboardLed(config.led_name)
+            return RazerKeyboardLed(config)
         else:
             raise Exception('`{}` is not a valid led type'.format(config.led_type))

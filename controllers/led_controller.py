@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Union
 
 from leds.led import Led
 from parameters.controller_parameters import ControllerParameters
@@ -13,8 +13,8 @@ class LedController(ABC):
     def is_compatible_config(self, config: ControllerParameters) -> bool:
         return self._config == config
 
-    def controls_led(self, led: Led) -> bool:
-        return led in self._leds
+    def controls_led(self, *args, **kwargs) -> bool:
+        return self.find_led(*args, **kwargs) is not None
 
     def add_led(self, led: Led):
         if not self.has_leds():
@@ -22,7 +22,16 @@ class LedController(ABC):
 
         self._leds.append(led)
 
-    def remove_led(self, led: Led):
+    def find_led(self, name: str) -> Union[Led, None]:
+        for searched_led in self._leds:
+            if searched_led.name == name:
+                return searched_led
+
+        return None
+
+    def remove_led(self, *args, **kwargs):
+        led = self.find_led(*args, **kwargs)
+
         try:
             self._leds.remove(led)
         except ValueError:

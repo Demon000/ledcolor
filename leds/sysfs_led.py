@@ -2,13 +2,14 @@ import os
 from abc import abstractmethod, ABCMeta
 
 from leds.led import Led
+from parameters.led_parameters import LedParameters
 
 
 class SysfsLed(Led, metaclass=ABCMeta):
-    def __init__(self, led_name):
-        super().__init__(led_name)
+    def __init__(self, config: LedParameters):
+        super().__init__(config)
 
-        self.__path = '/sys/class/leds/{}/'.format(led_name)
+        self.__path = '/sys/class/leds/{}/'.format(config.led_name)
         self.__check_existence()
         self.__read_max_brightness()
         self.__open_brightness()

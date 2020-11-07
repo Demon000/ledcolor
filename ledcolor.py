@@ -42,6 +42,10 @@ def main():
     {}
     """.format(', '.join(ControllerType.list())))
 
+    parser.add_argument('-f', '--flip', dest='led_matrix_flip', default=False, type=bool, help="""
+    Whether to flip the given matrix LED
+    """)
+
     parser.add_argument('-V', '--value-mode', dest='value_mode', choices=FourierValueMode.list(),
                         default=FourierValueMode.MAX, help="""
     Value mode to use when in fourier sound mode. This determines how the individual frequencies affect

@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
+from parameters.led_parameters import LedParameters
+
 
 class Led(ABC):
-    def __init__(self, led_name):
-        self.name = led_name
+    def __init__(self, config: LedParameters):
+        self.name = config.led_name
 
         self.__last_color = None
 
